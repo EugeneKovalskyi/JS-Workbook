@@ -836,4 +836,127 @@ class ExtendedClock extends Clock {
 // let clock = new ExtendedClock({ template: 'hh:mm:ss', precision: 500 })
 // clock.start()
 
+let parentMixin = {
+  parentMethod(echo) {
+    console.log(echo)
+  },
+}
+
+let childMixin = {
+  __proto__: parentMixin,
+
+  childMethod() {
+    super.parentMethod(this.echo)
+  },
+}
+
+class GiveMeMixin {
+  constructor(echo) {
+    this.echo = echo
+  }
+}
+
+Object.assign(GiveMeMixin.prototype, childMixin)
+
+// new GiveMeMixin('I said ECHO').childMethod()
+
+let eventMixin = {
+  // Subscribe on event
+  on(eventName, handler) {
+    this._eventHandlers ??= {}
+    this._eventHandlers[eventName] ??= []
+    this._eventHandlers[eventName].push(handler)
+  },
+
+  // Unsubscribe from event
+  off(eventName, handler) {
+    let handlers = this._eventHandlers?.[eventName]
+
+    if (!handlers) return
+
+    for (let i = 0; i < handlers.length; i++) {
+      if (handlers[i] === handler) handlers.splice(i--, 1)
+    }
+  },
+
+  // Generate event
+  trigger(eventName, ...args) {
+    let handlers = this._eventHandlers?.[eventName]
+
+    if (!handlers) return
+
+    handlers.forEach((handler) => handler.apply(this, args))
+  },
+}
+
+class Menu {
+  choose(value) {
+    this.trigger('select', value)
+  }
+}
+
+Object.assign(Menu.prototype, eventMixin)
+
+let menu = new Menu()
+let consoleLogHandler = (value) => console.log(value)
+
+// menu.on('select', consoleLogHandler)
+// menu.off('select', consoleLogHandler)
+// menu.choose('Hello World!')
+
+class ReadError extends Error {
+  constructor(message, cause) {
+    super(message)
+    this.cause = cause
+    this.name = 'ReadError'
+  }
+}
+
+class ValidationError extends Error {
+  constructor(message) {
+    super(message)
+    this.name = this.constructor.name
+  }
+}
+
+class PropertyRequiredError extends ValidationError {
+  constructor(property) {
+    super('Absent property: ' + property)
+    this.property = property
+  }
+}
+
+function readUser(json) {
+  let user
+
+  try {
+    user = JSON.parse(json)
+  } catch (error) {
+    if (error instanceof SyntaxError) throw new ReadError(error.name, error)
+    else throw error
+  }
+
+  try {
+    validateUser(user)
+  } catch (error) {
+    if (error instanceof ValidationError) throw new ReadError(error.name, error)
+    else throw error
+  }
+}
+
+function validateUser(user) {
+  if (!user.age) throw new PropertyRequiredError('age')
+  if (!user.name) throw new PropertyRequiredError('name')
+
+  return user
+}
+
+// try {
+//   readUser('{ "name": "k", "age": 25 }')
+// } catch (error) {
+//   if (error instanceof ReadError) {
+//     console.log(`${error.name}: ${error.cause}`)
+//   } else throw error
+// }
+
 // class b_tree {}

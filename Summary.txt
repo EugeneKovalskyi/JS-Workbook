@@ -52,36 +52,37 @@
 >>  == и Boolean() используют разные правила приведения типов
 
 >>  Полифил - аналог метода в спецификации, который не поддерживается в более старой версией движка
+>>  Инкапсуляция - разделение интерфейса на внутренний и внешний
 
 
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\
 2.   Основные типы данных   
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
-  1. Number (спец. числовые значения: Infinity, -Infinity, NaN)                     
+      1. Number (спец. числовые значения: Infinity, -Infinity, NaN)                     
 
-  2. BigInt (для работы с целыми числами произвольной длинны; добавить n в конце числа)
+      2. BigInt (для работы с целыми числами произвольной длинны; добавить n в конце числа)
 
-  3. String
+      3. String
 
-  4. Boolean
+      4. Boolean
 
-  5. Null         
+      5. Null         
 
-  6. Undefined
+      6. Undefined
 
-  7. Symbol
+      7. Symbol
 
-  8. Object
+      8. Object
   
 
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\
 3.   Преобразование типов   
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
-1.  Строковое (String(value))
-2.  Числовое (Number(value), '6' / '2' = 3)
-3.  Логическое (Boolean(value))
+      1.  Строковое (String(value))
+      2.  Числовое (Number(value), '6' / '2' = 3)
+      3.  Логическое (Boolean(value))
 
 
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -137,24 +138,24 @@ value++   > возвращает старое значение
 6.   Функции   
 \\\\\\\\\\\\\\\
 
-1. Function Declaration                          : function foo() {} 
-      > В Lexical Environment инициализируется мгновенно и полностью
+      1. Function Declaration                          : function foo() {} 
+            > В Lexical Environment инициализируется мгновенно и полностью
       
-2. Function Expression                           : let foo = function() {} 
-      > Не имеет        this
-      > Не имеет        super
-      > Не имеет        "arguments"
-      > Не могут        быть вызваны с new
+      2. Function Expression                           : let foo = function() {} 
+            > Не имеет        this
+            > Не имеет        super
+            > Не имеет        "arguments"
+            > Не могут        быть вызваны с new
 
-3. Named Function Expression (NFE)               : let foo = function bar() {} 
-      > Function Expression с именем 
-      > Для рекурсивных вызовов 
-      > Недоступна за пределами фу-и;
+      3. Named Function Expression (NFE)               : let foo = function bar() {} 
+            > Function Expression с именем 
+            > Для рекурсивных вызовов 
+            > Недоступна за пределами фу-и;
 
-4. new Function([arg1, ..., argN], functionBody) : let foo = new Function('a', 'b', 'return a + b')
-      > Имеет [[Environment]], ссылающийся на глобальное лексическое окружение
+      4. new Function([arg1, ..., argN], functionBody) : let foo = new Function('a', 'b', 'return a + b')
+            > Имеет [[Environment]], ссылающийся на глобальное лексическое окружение
 
-5. Шаблонные функции - foo`some text and ${arg1} and ${arg2}`
+      5. Шаблонные функции - foo`some text and ${arg1} and ${arg2}`
 
 
 >> new.target - исп. внутри фу-и, чтобы проверить вызвана ли фу-я при помощи new
@@ -217,7 +218,15 @@ value++   > возвращает старое значение
                                           2. "number"
                                           3. "default"
 
->> [Symbol.isConcatSpreadable]: true
+>> [Symbol.isConcatSpreadable]: true - спец. свойство объекта, которое указывает методу array.concat(obj) обрабатывать obj как массив
+                                       * Пример:
+                                                let array = [1, 2]
+                                                let obj = { 0: 'someValue', 1: 'anotherValue' }
+                                                ( array.concat(obj) ) // 1, 2, someValue, anotherValue
+
+>> [Symbol.toStringTag]: 'Value' - спец. свойство объекта для настройки toString у объектов.
+                                   Это свойство есть у большей части встроенных объектов.
+                                   Результат === значение этого свойства обернутое в [object Value]
 
 >> Дескриптор свойства - объект, который содержит значение и флаги (атрибуты) свойства
 >> Атрибуты дескриптора для date properties: 
@@ -290,9 +299,8 @@ value++   > возвращает старое значение
 
 >> Класс - шаблон кода для создания объектов, который устанавливает в них начальные свойства и методы
 
-
 >> [[IsClassConstructor]]: true - спец. внутр. свойство фу-и, созданной с помощью class 
->> Методы и constructor сохраняются в SomeClass.prototype
+>> Методы и constructor - сохраняются в SomeClass.prototype
 >> Методы класса неперечисляемы
 >> Классы всегда используют 'use strict'
 >> (Named) Class Expression - аналог (Named) Function Expression
@@ -312,7 +320,6 @@ value++   > возвращает старое значение
                                     Поэтому, если мы создаем конструктор в дочернем классе, необходимо вызвать super,
                                     иначе объект для this не будет создан и мы получим ошибку.
 
-* Переопределение поля
 >> Родительский конструктор всегда использует СВОЕ ЗНАЧЕНИЕ ПОЛЯ, а не переопределенное дочерним классом
 >> Поля РОДИТЕЛЬСКОГО класса инициализируются перед конструктором
 >> Поля ДОЧЕРНЕГО класса инициализируются после вызова super
@@ -323,16 +330,73 @@ value++   > возвращает старое значение
       - нельзя изменить, поэтому копировать метод использующий super, между объектами небезопасно
       - в объектах работает только в методах объявленных как method()
 
+>> Статические свойства и методы класса - устанавливаются самому классу:
+      - наследуются дочерним классом ( Child.[[Prototype]] = Parent ) 
+      - НЕ наследются от встроенных классов
+      - this === сам класс ( по аналогии с объектами )
+      - экземплярам класса НЕДОСТУПНЫЕ
+      - СИНТАКСИС: 
+            1. class MyClass {
+                  static property = ...
+                  static method() { ... }
+            };
+
+            2. MyClass.property = ...
+               MyClass.method   = ...
+              
+>> Защищенные методы и свойства - по соглашению JS-программистов:
+      - доступны только внутри класса
+      - начинаются с префикса ' _ '
+
+>> Приватные методы и свойства:
+      - начинаются со спец. символа ' # '
+      - доступны исключительно внутри класса
+      - не наследуются
+      - не конфликтуют с публичными
+      - не работает с this ( this['#prop'] - не работает )
+
+>> Symbol.species - спец. статический getter, который должен вернуть конструктор,
+                    который будет использован для создания новых объектов:
+                    * Пример: 
+                        class ExtendedArray extends Array {
+                              static get [Symbol.species]() { return Array }
+                        }           
+                        let array = new ExtendedArray(1, 2, 3, 4, 5)
+                        let filteredArray = array.filter(item => item >=3)
+                        ( filteredArray.__proto__ === array.__proto__ ) // false
+      
+>> instanceof - оператор проверяет, принадлежит ли объект указанному классу, с учетом наследования
+                Алгоритм работы: 
+                        1. Если в классе есть статичный метод [Symbol.hasInstance], то вызвать его ( должен возвращать true/false):
+                              * Пример:
+                                    class Animal {
+                                          static [Symbol.hasInstance](obj) { if (obj.catEat) return true }
+                                    }
+                                    let obj = { catEat }
+                                    ( obj instanceof Animal ) // true
+
+                        2. Проверка на равенство прототипа класса какому либо прототипу в прототипной цепочке объекта: 
+                              ( Class.prototype === obj.__proto__ )
+                              ( Class.prototype === obj.__proto__.__proto__ ) и т.д.
+
+>> objA.isPrototypeOf(objB) - аналог instanceof: ( obj instanceof Class === Class.prototype.isPrototypeOf(obj) )
+
+>> Примеси (Mixins) - класс, методы которого предназначены для расширения функциональности других классов без наследования от примеси.
+                    - Примесь необходимо скопировать в прототип расширяемого класса ( Object.assign(ClassName.prototype, mixin) )
+                    - Примесь перезаписывает существующие методы класса
+
+>> JavaScript НЕ поддерживает множественное наследование. Вместо него используют Mixins
+
 
 \\\\\\\\\\\\\\\\\\\\\\\\\\
 10.   Тип данных Symbol   
 \\\\\\\\\\\\\\\\\\\\\\\\\\
 
-1. Symbol.for(key) 
-2. Symbol.keyFor(symbol)
-3. Object.getOwnPropertySymbols(obj)
-4. Reflect.ownKeys(obj)
-5. Symbol.toPrimitive
+      1. Symbol.for(key) 
+      2. Symbol.keyFor(symbol)
+      3. Object.getOwnPropertySymbols(obj)
+      4. Reflect.ownKeys(obj)
+      5. Symbol.toPrimitive
 
 >> Свойства, чьи ключи Символы игнорируются циклом for...in и Object.keys()
 
@@ -345,13 +409,40 @@ value++   > возвращает старое значение
                и может получить к ним доступ. ( https://learn.javascript.ru/closure )
                
 
-\\\\\\\\\\\\\\\\\\\\\\
-12.   Полезный софт   
-\\\\\\\\\\\\\\\\\\\\\\
+/////////////////////////
+12.   Обработка ошибок
+/////////////////////////
 
---------------------------------
-1. Cache-Wrapper + call + apply 
---------------------------------
+>> try {} catch() {} finally {} - работает синхронно, то есть ассинхронный код игнорируется
+      - finally выполняется всегда, в т.ч. после return 
+      - при возникновении ошибки JS генерирует объект ошибки и передает как аргумент в блок catch
+      - catch должен обрабатывать только известные ему ошибки, а остальные пробрасывать ( throw error )
+
+>> throw <объект ошибки> - оператор генерирующий ошибку
+
+>> window.onerror = function (message, url, line, column, error) {} - глобальный catch
+
+>> Сервисы для логирования ошибок:
+      - https://errorception.com
+      - http://www.muscula.com
+
+>> Расширение встроенных классов ошибок:
+      - class MyError extends Error
+      - вызвать super
+      - изменить name ( this.name = this.constructor.name - чтобы не прописывать вручную name)
+
+>> instanceof - использовать для проверки типа ошибок (при расширении классов ошибок)
+
+>> Обертывание исключений - алгоритм: фу-я ловит низкоуровневые исключения и создает 1 высокоуровневое
+      
+
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+* * *   Полезный софт   * * *   
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+------------------------------------
+* 1. Cache-Wrapper + call + apply 
+------------------------------------
 let workers = {
    someProp: 10,
     
@@ -385,3 +476,86 @@ function cachingDecorator(func, hash) {
 console.log(workers.someMethod(1, 2))
 
 
+------------------------------------------------------
+* 2. Object.prototype.toString - расширенный typeof
+------------------------------------------------------
+
+let objToString = Object.prototype.toString
+
+let user           = { [Symbol.toStringTag]: 'User' }       
+let array          = []                                     
+let number         = 123                                    
+let string         = 'str'                                  
+let boolean        = true                                   
+let nullValue      = null                                   
+let functionValue  = alert                                  
+let undefinedValue = undefined                              
+
+objToString.call(user)              // [object User]    
+objToString.call(array)             // [object Array]
+objToString.call(number)            // [object Number]
+objToString.call(string)            // [object String]
+objToString.call(boolean)           // [object Boolean]
+objToString.call(nullValue)         // [object Null]
+objToString.call(functionValue)     // [object Function]
+objToString.call(undefinedValue)    // [object Undefined]
+
+
+------------------------------
+* 3. Обёртывание исключений
+------------------------------
+
+class ReadError extends Error {
+      constructor(message, cause) {
+        super(message)
+        this.cause = cause
+        this.name = 'ReadError'
+      }
+}
+    
+class ValidationError extends Error {
+      constructor(message) {
+            super(message)
+            this.name = this.constructor.name
+      }
+}
+    
+class PropertyRequiredError extends ValidationError {
+      constructor(property) {
+            super('Absent property: ' + property)
+            this.property = property
+      }
+}
+    
+function readUser(json) {
+      let user
+    
+      try {
+            user = JSON.parse(json)
+      } catch (error) {
+            if (error instanceof SyntaxError) throw new ReadError(error.name, error)
+            else throw error
+      }
+    
+      try {
+            validateUser(user)
+      } catch (error) {
+            if (error instanceof ValidationError) throw new ReadError(error.name, error)
+            else throw error
+      }
+}
+    
+function validateUser(user) {
+      if (!user.age) throw new PropertyRequiredError('age')
+      if (!user.name) throw new PropertyRequiredError('name')
+    
+      return user
+}
+    
+try {
+      readUser('{ "name": "k", "age": 25 }')
+} catch (error) {
+      if (error instanceof ReadError) {
+            console.log(`${error.name}: ${error.cause}`)
+      } else throw error
+}
