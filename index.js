@@ -960,3 +960,97 @@ function validateUser(user) {
 // }
 
 // class b_tree {}
+
+function showAwatarThen() {
+  fetch('https://api.github.com/users/EugeneKovalskyi')
+    .then((response) => response.json())
+    .then(
+      (user) =>
+        new Promise((resolve) => {
+          let img = document.createElement('img')
+          img.src = user.avatar_url
+          document.body.append(img)
+
+          setTimeout(() => resolve(user))
+        })
+    )
+    .then((user) => console.log(user.name))
+}
+
+// showAwatarThen()
+
+async function showAwatarAsync() {
+  let response = await fetch('https://api.github.com/users/EugeneKovalskyi')
+  let user = await response.json()
+
+  let img = document.createElement('img')
+  img.src = user.avatar_url
+  document.body.append(img)
+
+  await new Promise((resolve, reject) => setTimeout(resolve, 3000))
+
+  img.remove()
+
+  return user
+}
+
+// showAwatarAsync()
+
+function getMaxSubSum(array) {
+  let result = 0
+  let temp = 0
+
+  for (let i = 0; i < array.length; i++) {
+    temp += array[i]
+
+    if (temp < 0) temp = 0
+
+    if (result < temp) result = temp
+  }
+
+  return result
+}
+
+// console.log(getMaxSubSum([-1, 2, 3, -9]))
+// console.log(getMaxSubSum([2, -1, 2, 3, -9]))
+// console.log(getMaxSubSum([-1, 2, 3, -9, 11]))
+// console.log(getMaxSubSum([-2, -1, 1, 2]))
+// console.log(getMaxSubSum([100, -9, 2, -3, 5]))
+// console.log(getMaxSubSum([1, 2, 3]))
+
+class HttpError extends Error {
+  constructor(response) {
+    super(`${response.status} for ${response.url}`)
+    this.name = 'HttpError'
+    this.response = response
+  }
+}
+
+async function loadJson(url) {
+  let response = await fetch(url)
+
+  if (response.status === 200) return await response.json()
+  else throw new HttpError(response.status)
+}
+
+async function getUser() {
+  let user
+
+  do {
+    let name = prompt('Enter your login: ', 'Anonymous')
+
+    try {
+      user = await loadJson(`https://api.github.com/users/${name}`)
+      break
+    } catch (error) {
+      if (error instanceof HttpError && error.response.status === 404) {
+        console.log('No such user. Try enter again.')
+      } else throw error
+    }
+  } while (true)
+
+  console.log(user.name)
+  return user
+}
+
+// getUser()
