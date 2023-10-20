@@ -1121,17 +1121,6 @@ let asyncRange = {
 
 // console.log([...asyncRange]) // Error: asyncRange is not iterable
 
-let randomObj = {
-  a: 1,
-  b: 2,
-  c: 3,
-  then(value) {
-    return {
-      value,
-    }
-  },
-}
-
 async function* generateAsyncSequence(start, end) {
   for (let i = start; i <= end; i++) {
     await new Promise((resolve) => setTimeout(resolve, 1000))
@@ -1140,8 +1129,22 @@ async function* generateAsyncSequence(start, end) {
   }
 }
 
-;(async () => {
-  let asyncGenerator = generateAsyncSequence(1, 5)
+// ;(async () => {
+//   let asyncGenerator = generateAsyncSequence(1, 5)
 
-  for await (let value of asyncGenerator) console.log(value)
-})()
+//   for await (let value of asyncGenerator) console.log(value)
+// })()
+
+function* pseudoRandom(seed) {
+  while (true) {
+    seed = (seed * 16807) % 2147483647
+
+    yield seed
+  }
+}
+
+// let generator = pseudoRandom(1)
+
+// console.log(generator.next().value)
+// console.log(generator.next().value)
+// console.log(generator.next().value)
