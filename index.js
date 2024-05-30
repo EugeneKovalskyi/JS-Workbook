@@ -904,63 +904,6 @@ let consoleLogHandler = (value) => console.log(value)
 // menu.off('select', consoleLogHandler)
 // menu.choose('Hello World!')
 
-class ReadError extends Error {
-  constructor(message, cause) {
-    super(message)
-    this.cause = cause
-    this.name = 'ReadError'
-  }
-}
-
-class ValidationError extends Error {
-  constructor(message) {
-    super(message)
-    this.name = this.constructor.name
-  }
-}
-
-class PropertyRequiredError extends ValidationError {
-  constructor(property) {
-    super('Absent property: ' + property)
-    this.property = property
-  }
-}
-
-function readUser(json) {
-  let user
-
-  try {
-    user = JSON.parse(json)
-  } catch (error) {
-    if (error instanceof SyntaxError) throw new ReadError(error.name, error)
-    else throw error
-  }
-
-  try {
-    validateUser(user)
-  } catch (error) {
-    if (error instanceof ValidationError) throw new ReadError(error.name, error)
-    else throw error
-  }
-}
-
-function validateUser(user) {
-  if (!user.age) throw new PropertyRequiredError('age')
-  if (!user.name) throw new PropertyRequiredError('name')
-
-  return user
-}
-
-// try {
-//   readUser('{ "name": "k", "age": 25 }')
-// } catch (error) {
-//   if (error instanceof ReadError) {
-//     console.log(`${error.name}: ${error.cause}`)
-//   } else throw error
-// }
-
-// class b_tree {}
-
 function showAwatarThen() {
   fetch('https://api.github.com/users/EugeneKovalskyi')
     .then((response) => response.json())
@@ -1148,3 +1091,62 @@ function* pseudoRandom(seed) {
 // console.log(generator.next().value)
 // console.log(generator.next().value)
 // console.log(generator.next().value)
+
+/*******************************************/
+/* Сумма с произвольным количеством скобок */
+/*******************************************/
+
+let result = 0
+
+function sum(x) {
+  result += x
+  return sum
+}
+
+sum[Symbol.toPrimitive] = function () {
+  let temp = result
+  result = 0
+  return temp
+}
+
+console.log(sum(1)(2)(3)) // 6
+
+/**********************************************/
+/* Последовательность Фибоначчи с помощью Map */
+/**********************************************/
+
+let cache = new Map()
+
+function fibonacci(n) {
+  return new Promise((resolve) => {
+    if (n === 0 || n === 1) return resolve(n)
+
+    if (cache.has(n)) return resolve(cache.get(n))
+
+    Promise.all([fibonacci(n - 1), fibonacci(n - 2)]).then(([fib1, fib2]) => {
+      cache.set(n, fib1 + fib2)
+      resolve(fib1 + fib2)
+    })
+  })
+}
+
+// fibonacci(1000).then((result) => console.log(result))
+
+/******************/
+/* Прокси-обёртка */
+/******************/
+
+let obj3 = { name: 'John' }
+
+function wrapProxy(target) {
+  return new Proxy(target, {
+    get(target, prop) {
+      if (prop in target) return Reflect.get(target, prop)
+      else throw new Error('No property exist')
+    },
+  })
+}
+
+// obj3 = wrapProxy(obj3)
+// console.log(obj3.name)
+// console.log(obj3.age)
