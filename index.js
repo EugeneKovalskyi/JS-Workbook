@@ -1109,7 +1109,7 @@ sum[Symbol.toPrimitive] = function () {
   return temp
 }
 
-console.log(sum(1)(2)(3)) // 6
+// console.log(sum(1)(2)(3)) // 6
 
 /**********************************************/
 /* Последовательность Фибоначчи с помощью Map */
@@ -1150,3 +1150,246 @@ function wrapProxy(target) {
 // obj3 = wrapProxy(obj3)
 // console.log(obj3.name)
 // console.log(obj3.age)
+
+/**************************/
+/* Дерево HTML из объекта */
+/**************************/
+
+const obj4 = {
+  Рыбы: {
+    форель: {},
+    лосось: {},
+  },
+
+  Деревья: {
+    Огромные: {
+      секвойя: {},
+      дуб: {},
+    },
+    Цветковые: {
+      яблоня: {},
+      магнолия: {},
+    },
+  },
+}
+
+const container = document.getElementById('tree')
+const html = ''
+
+// createTree(container, obj4)
+
+/**** Способ 1 ***/
+
+function createTree(container, obj) {
+  if (Object.keys(obj).length) {
+    const ul = document.createElement('ul')
+
+    container.append(ul)
+
+    for (let key in obj) {
+      const li = document.createElement('li')
+
+      li.textContent = key
+
+      ul.append(li)
+
+      createTree(li, obj[key])
+    }
+  }
+
+  /*** Способ 2 ***/
+
+  // buildHTML(obj)
+  // container.innerHTML = html
+}
+
+// function buildHTML(obj) {
+//   if (Object.keys(obj).length) {
+//     html += '<ul>'
+
+//     for (let key in obj) {
+//       html += '<li>' + key
+
+//       buildHTML(obj[key])
+
+//       html += '</li>'
+//     }
+
+//     html += '</ul>'
+//   }
+// }
+
+/****************************************************************/
+/* Дописать к каждому элементу ко-во вложенных в него элементов */
+/****************************************************************/
+
+const allLi = document.body.querySelectorAll('li')
+
+for (let li of allLi) {
+  const length = li.querySelectorAll('li').length
+
+  if (length) {
+    const name = li.firstChild.data
+
+    li.firstChild.data = `${name} [${length}]\n`
+  }
+}
+
+/************************************/
+/* Создать календарь в виде таблицы */
+/************************************/
+
+const calendar = document.getElementById('calendar')
+
+function createCalendar(elem, year, month) {
+  const table = document.createElement('table')
+  const date = new Date(year, month - 1)
+  const daysInMonth = new Date(new Date(year, month) - 1).getDate()
+
+  let dayOfMonth = 1
+  let dayOfWeek = 0
+
+  renderDaysNames(table)
+
+  while (dayOfMonth <= daysInMonth) {
+    const tr = document.createElement('tr')
+
+    while (dayOfWeek < 7) {
+      const td = document.createElement('td')
+
+      if (dayOfMonth > daysInMonth) {
+        tr.append(td)
+        dayOfWeek++
+        continue
+      }
+
+      if (dayOfWeek === getDay(date)) {
+        td.textContent = dayOfMonth
+
+        dayOfMonth++
+        date.setDate(dayOfMonth)
+      }
+
+      dayOfWeek++
+
+      tr.append(td)
+    }
+
+    dayOfWeek = 0
+
+    table.append(tr)
+  }
+
+  elem.append(table)
+}
+
+function renderDaysNames(table) {
+  const daysNames = ['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'ВС']
+  const tr = document.createElement('tr')
+
+  for (let i = 0; i < 7; i++) {
+    const th = document.createElement('th')
+
+    th.textContent = daysNames[i]
+    tr.append(th)
+  }
+
+  table.append(tr)
+}
+
+function getDay(date) {
+  let day = date.getDay()
+
+  if (day === 0) day = 7
+
+  return day - 1
+}
+
+// createCalendar(calendar, 2012, 9)
+
+/********/
+/* Часы */
+/********/
+
+const clockFace = document.getElementById('clockFace')
+let intervalID = null
+
+function clockStart() {
+  intervalID = setInterval(renderClockFace, 1000)
+  renderClockFace()
+}
+
+function clockStop() {
+  clearInterval(intervalID)
+}
+
+function renderClockFace() {
+  const time = new Date()
+
+  clockFace.textContent = `${time.getHours()}:${time.getMinutes()}:${
+    time.getSeconds() < 10 ? '0' + time.getSeconds() : time.getSeconds()
+  }`
+}
+
+/**********************/
+/* Сортировка таблицы */
+/**********************/
+
+const table = document.getElementById('table')
+
+function sortTable(table) {
+  const tableBody = document.querySelector('tbody')
+  const rows = tableBody.querySelectorAll('tr')
+  const rowsArray = Array.from(rows)
+
+  rowsArray.sort((curr, next) => {
+    const currName = curr.firstElementChild.textContent
+    const nextName = next.firstElementChild.textContent
+
+    if (currName === nextName) return 0
+    if (currName < nextName) return -1
+    if (currName > nextName) return 1
+  })
+
+  for (let i = 0; i < rowsArray.length; i++) rows[i].remove()
+
+  for (let i = 0; i < rowsArray.length; i++) tableBody.append(rowsArray[i])
+}
+
+// sortTable(table)
+
+/**********************/
+/* Сортировка таблицы */
+/**********************/
+
+const field = document.getElementById('field')
+const ball = document.getElementById('ball')
+
+field.addEventListener('click', moveBall)
+
+function moveBall(event) {
+  const ballCoords = ball.getBoundingClientRect()
+  const ballDiameter = ballCoords.width
+  const ballRadius = ballDiameter / 2
+  const fieldCoords = field.getBoundingClientRect()
+  const fieldTop = fieldCoords.top + field.clientTop
+  const fieldBottom = fieldCoords.bottom - field.clientTop
+  const fieldLeft = fieldCoords.left + field.clientLeft
+  const fieldRight = fieldCoords.right - field.clientLeft
+
+  const ballLeft = event.clientX - ballRadius
+  const ballRight = event.clientX + ballRadius
+  const ballTop = event.clientY - ballRadius
+  const ballBottom = event.clientY + ballRadius
+
+  let x = ballLeft
+  let y = ballTop
+
+  if (ballLeft < fieldLeft) x = fieldLeft
+  if (ballRight > fieldRight) x = fieldRight - ballDiameter
+  if (ballTop < fieldTop) y = fieldTop
+  if (ballBottom > fieldBottom) y = fieldBottom - ballDiameter
+
+  ball.style.left = x + 'px'
+  ball.style.top = y + 'px'
+}

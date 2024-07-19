@@ -234,11 +234,11 @@ value++   > возвращает старое значение
 7.   Объекты    
 \\\\\\\\\\\\\\\
 
->> null и undefined НЕ имеют объектов-оберток. У них нет: свойств, методов, прототипов
+>> null и undefined НЕ имеют объектов-оберток. У них нет свойств, методов, прототипов.
 
->> Все ключи объектов преобразуются в строки (кроме символов и строк)
+>> Все ключи объектов преобразуются в строки (кроме символов и строк).
 
->> this - указывает на объект перед точкой
+>> this - указывает на объект перед точкой.
 
 >> ?. - опциональная цепочка (optional chaining) - останавливает вычисление и возвращает undefined,
         если значение слева === undefined или === null 
@@ -247,14 +247,14 @@ value++   > возвращает старое значение
         - работает для вызова фу-и, которой может не существовать ( obj.method?.() )
         - работает для объектов со свойствами в квадратных скобках ( obj?.[prop] )
 
->> [Symbol.iterator]() {} - спец. метод объекта для настройки итерации объекта "вручную". Возвращает объект с методом next(),
-                            который вызывается на каждой итерации 
+>> [Symbol.iterator]() {} - спец. метод объекта для настройки итерации объекта "вручную". 
+                            Возвращает объект с методом next(), который вызывается на каждой итерации.
 
 >> Варианты преобразования типов (хинты): 1. "string"
                                           2. "number"
                                           3. "default"
 
->> [Symbol.isConcatSpreadable]: true - спец. свойство объекта, которое указывает методу array.concat(obj) обрабатывать obj как массив
+>> [Symbol.isConcatSpreadable]: true - спец. свойство объекта, которое указывает методу array.concat(obj) обрабатывать obj как массив.
                                        * Пример:
                                                 let array = [1, 2]
                                                 let obj = { 0: 'someValue', 1: 'anotherValue' }
@@ -262,27 +262,26 @@ value++   > возвращает старое значение
 
 >> [Symbol.toStringTag]: 'Value' - спец. свойство объекта для настройки toString у объектов.
                                    Это свойство есть у большей части встроенных объектов.
-                                   Результат === значение этого свойства обернутое в [object Value]
+                                   Результат === значение этого свойства обернутое в [object Value].
 
->> Дескриптор свойства - объект, который содержит значение и флаги (атрибуты) свойства
->> Атрибуты дескриптора для date properties: 
+>> Дескриптор свойства - объект, который содержит значение и флаги (атрибуты) свойства.
+>> Атрибуты дескриптора для data properties: 
       - value 
       - writable        === false, value нельзя изменить
       - enumerable      === false, свойство игнорируется циклом, Object.keys
       - configurable    === false, нельзя удалить, нельзя изменить значение всех атрибутов с false на true
 
->> Object.getOwnPropertyDescriptor(obj, propName)       - возвращает дескриптор свойства
->> Object.getOwnPropertyDescriptors(obj)                - возвращает объект, содержащий дескрипторы всех свойств
->> Object.defineProperty(obj, propName, descriptor)     - возвращает obj
->> Object.defineProperties(obj, { prop: descriptor })   - возвращает obj
->> let clone = Object.defineProperties({}, Object.getOwnPropertyDescriptors(obj)) - клонирование объекта вместе с флагами
-
+>> Object.getOwnPropertyDescriptor(obj, propName)       - возвращает дескриптор свойства.
+>> Object.getOwnPropertyDescriptors(obj)                - возвращает объект, содержащий дескрипторы всех свойств.
+>> Object.defineProperty(obj, propName, descriptor)     - возвращает obj.
+>> Object.defineProperties(obj, { prop: descriptor })   - возвращает obj.
+>> let clone = Object.defineProperties({}, Object.getOwnPropertyDescriptors(obj)) - клонирование объекта вместе с флагами.
 
 >> Типы свойств:
       - Data properties (свойства-данные)
       - Accessor properties (свойства-аксессоры) 
 
->> Accessor properties - фу-и, которые исп. для получения и присвоения значения, но синтаксически выглядит как свойство объекта
+>> Accessor properties - фу-и, которые исп. для получения и присвоения значения, но синтаксически выглядит как свойство объекта.
       let obj = {
             get propName() {}       - срабатывает при чтении obj.propName
             set propName(value) {}  - срабатывает при записи obj.propName = value 
@@ -299,11 +298,11 @@ value++   > возвращает старое значение
       > let collator  = Intl.Collator([locales, [options]])
       > let formatter = Intl.DateTimeFormat([locales, [options]])
       > let formatter = Intl.NumberFormat([locales, [options]])
+
+>> Сильная ссылка - ссылка на объект, которая предотвращает его удаление сборщиком мусора.
+>> Слабая ссылка  - ссылка на объект, которая НЕ предотвращает его удаление сборщиком мусора.
   
->> Сильная ссылка - ссылка на объект, которая предотвращает его удаление сборщиком мусора
->> Слабая ссылка  - ссылка на объект, которая НЕ предотвращает его удаление сборщиком мусора
-  
->> new WeakRef(target) - объект, содержащий слабую ссылку на target
+>> new WeakRef(target) - объект, содержащий слабую ссылку на target.
 >> new FinalizationRegistry(cleanuCallback) - объект, который позволяет привязять к target колбэк очистки, 
                                                 который выполниться после удаления target из памяти сборщиком мусора.
 
@@ -797,22 +796,268 @@ value++   > возвращает старое значение
 17.  DOM
 \\\\\\\\\\\
 
->> Методы:
-      elem.matches(css) - проверяет (true/false) удовлетворяет ли элемент CSS
-      elem.closest(css) - ищет ближайшего предка, включая сам элемент
-      elemA.contains(elemB) - true, если elemB внутри elemA или elemA === elemB, иначе false 
+>> Свойства и методы:
++ Свойства узлов
+      elem.nodeType           - тип узла. [number, read only].
+      elem.tagName            - имя тега элемента. [read only].
+      node.nodeName           - имя/тип узла. [read only].
+      elem.innerHTML          - HTML-содержимое элемента.
+      elem.outerHTML          - HTML-элемент. Изменятся элемент в DOM, но не содержимое переменной.
+      textNode.data/nodeValue - содержимое ТЕКСТОВОГО узла.
+      elem.textContent        - текст внутри элемента.
+      
++ HTML-атрибуты
+      elem.hasAttribute(name)        - проверить наличие атрибута.
+      elem.getAttribute(name)        - получить значение атрибута.
+      elem.setAttribute(name, value) - установить значения атрибута.
+      elem.removeAttribute(name)     - удалить атрибут.
+      elem.attributes                - коллекция атрибутов в виде объектов со свойствами name и value.
+
++ Поиск элементов:
+      elem.matches(css)          - проверяет удовлетворяет ли элемент селектору CSS. [true/false].
+      elem.closest(css)          - ищет ближайшего предка, включая сам элемент.
+      elemA.contains(elemB)      - true, если elemB внутри elemA или elemA === elemB, иначе false.
+      elem.querySelector(css)    - находит первый подходящий элемент.
+      elem.querySelectorAll(css) - находит все подходящие элементы.
+      elem.getElementById(id)    - находит элемент по id.
+      elem.getElementsByClassName(class) -┐
+      elem.getElementsByTagName(tag) -----|--> возвращают коллекцию, которая обновляется при изменениях.
+      elem.getElementsByName(name) -------┘
+
++ Создание и изменения узлов
+      document.createElement(tag)     - создать элемент с заданным тегом.
+      document.creatTextNode(text)    - создать текстовый узел с заданным текстом.
+      node.prepend(node | string)     - добавить узел в начало.
+      node.append(node | string)      - добавить узел в конец.
+      node.before(node | string)      - добавить узел перед узлом.
+      node.after(node | string)       - добавить узел после узла.
+      node.replaceWith(node | string) - заменить узел на заданный узел.
+      node.remove()                   - удалить узел.
+      node.cloneNode(true | false)    - возвращает клон элемента с/без дочерними элементами.
+      insertAdjacentHTML(where, html)       - вставляет html    | where:
+      insertAdjacentText(where, string)     - вставляет текст   |  beforebegin/afteend  - до/после элемента.
+      insertAdjacentElement(where, element) - вставляет элемент |  afterbegin/beforeend - начало/конец элемента.
+
++ Стили и классы
+      elem.style - спец. объект стилей. Имена свойств CSS в JS преобразуются по принципу: дефис -> большая буква.
+!!!>               Оперирует только атрибутом style в HTML, не имеет доступа к стилям из <style> и файлов CSS.
+      elem.style.cssText - строка, содержащая ассоциативный массив CSS. 'prop1: value1; prop2: value2;'
+      elem.className     - строка с набором всех классов через пробел. 'class1 class2 class3'
+      elem.classList     - перебираемый объект, содержащий список и методы добавления/удаления классов.
+      elem.classList.add(string)      - добавить класс.
+      elem.classList.remove(string)   - удалить класс.
+      elem.classList.toggle(string)   - добавить класс, если его нет, удалить - если есть.
+      elem.classList.contains(string) - проверяет наличие класса. [true/false].
+      elem.style.anyProperty = "" - присвоить свойству пуйстую строку, чтобы сбросить стиль (вместо удаления).
+      getComputedStyle(element, [pseupo]) - возвращает объект с вычисленными стилями.
+                                            Аналог elem.style, но с учётом <style> и файлов CSS.
+                                            Значения свойств всегда в абсолютных величинах (пиксели).
+                                            Содержит только полные значения (paddingTop, но не padding).
+                                            Не даёт доступа к псевдоклассу :visited.
+
++ Размеры и прокрутка элементов
+      elem.getBoundingClientRect() - возвращает объект, содержащий координаты elem.
+      document.elementFromPoint(x, y) - возвращает самый глубоко вложенный элемемент в окне по координатам.
+      elem.offestParent - ближайший позиционированный предок элемента. null для элементов position: fixed.
+      elem.offsetLeft/offsetTop - координаты относительно левого верхнего угла offsetParent. (read only).
+      elem.offsetWidth/offsetHeight - ширина/высота элемента включая border. (read only).
+      elem.clientLeft/clientTop - отступы внутренней части элемента от внешней (часто равны border). (read only).
+      elem.clientWidth/clientHeight - контент + padding, без прокручиваемой области. (read only).
+      elem.scrollWidth/scrollHeight - контент + padding, и вся прокручиваемая область. (read only).
+      elem.scrollLeft/scrollTop - ширина/высота уже прокрученного контента.
+!!!>  Не стоит брать width/height из CSS.
+      document.documentElement.clientWidth/clientHeight - ширина/высота окна, за вычетом полосы прокрутки.
+      window.innerWidth/innerHeight - ширина/высота окна браузера вместе с полосой прокрутки.
+      window.pageXOffset/pageYOffset -| ширина/высота прокрученной области страницы.
+      window.scrollX/scrollY ---------┘
+      window.scrollBy(x, y) || (options) - прокручивает страницу ОТНОСИТЕЛЬНО её текущего положения. 
+      window.scrollTo(x, y) || (options) - прокручивает страницу на АБСОЛЮТНЫЕ координаты. 
+                                options === {
+                                    top: x,
+                                    left: y,
+                                    behavior : "auto"||  "instant" || "smooth"
+                                };
+      elem.scrollIntoView(top) || (options) - прокручивает страницу так, чтобы elem находился вверху/внизу 
+                                   options === {                                         (top = true/false).
+                                          behavior:  "auto" || "instant" || "smooth",
+                                          block: "start" || "center" || "end" || "nearest",
+                                          inline: "start" || "center" || "end" || "nearest"
+                                   };
+!!!>  Получить полную высоту документа:
+            let scrollHeight = Math.max(
+                  document.body.scrollHeight, document.documentElement.scrollHeight,
+                  document.body.offsetHeight, document.documentElement.offsetHeight,
+                  document.body.clientHeight, document.documentElement.clientHeight
+            );
+      document.body.style.overflow = 'hidden' - делает документ не прокручиваемым, но исчезает полоса прокрутки.
+
++ Устаревшие методы и свойства
+      parentElem.appendChild(node)               - добавить node в конец parentElem.
+      parentElem.insertBefore(node, nextSibling) - добавить node перед nextSibling.
+      parentElem.replaceChild(node, oldChild)    - заменить oldChild на node.
+      parentElem.removeChild(node)               - удалить node.
+      document.write(html) - во время загрузки страницы на ходу записывает в неё HTML (работает очень быстро).
+                             Если вызвать после окончания загрузки страницы, её содержимое затрётся. 
 
 >> Наборы ссылок:
-      > Для всех узлов: childNodes, parentNode, firstChild, lastChild, previousSibling, nextSibling
-      > ДЛ элементов: children, parentElement, firstElementChild, lastElementChild, previousElementChild, nextElementChild
-    
->> Поиск элементов:
-      elem.querySelector(css)
-      elem.querySelectorAll(css)
-      elem.getElementById(id)
-      elem.getElementsByClassName(class) ---|
-      elem.getElementsByTagName(tag) -------| --> возвращают коллекцию, которая обновляется при изменениях
-      elem.getElementsByName(name) ---------|
+      > Для всех узлов: childNodes, parentNode, firstChild, lastChild, previousSibling, nextSibling.
+      > Для элементов: children, parentElement, firstElementChild, lastElementChild, previousElementChild, nextElementChild.
+
+>> DOM-узлы представляют собой обычные объекты соответствующих классов.
+   Классы DOM описываются в Interface Description Language (IDL).
+   Пример классов DOM:
+      1. EventTarget
+      2. Node
+      3. Element
+      4. HTMLElement и т.п.
+
+>> Особенности HTML-атрибутов:
+      > Стандартные атрибуты в HTML-элементах соответствуют свойствам этих элементов в JS-коде.
+      > HTML-атрибуты регистронезависимы и их значения всегда строки.
+      > Значение некоторых HTML-атрибутов нельзя изменить в JS-коде.
+      > data-атрибуты доступны в свойстве элемента dataset: 
+            HTML: <a data-foo-bar="value"> ---> JS: a.dataset.fooBar
+
+>> DocumentFragment - класс, позволяющий создавать обёртку вокруг набора узлов.
+                      Когда обёртку куда-либо применяют, она исчезает и остаётся только её содержимое.
+
+
+\\\\\\\\\\\\\\\
+18.  События
+\\\\\\\\\\\\\\\
+
+>> Способы назначить обработчик событий:
+      1. Атрибут элемента on<имясобытия>
+      2. Свойство элемента on<имясобытия>
+      3. elem.addEventListener(event, handler, [options]):
+            > event - имя события
+            > handler - ссылка на функцию, или объект/экземпляр класса с методом handleEvent(event) {}
+            > options === 1. true/false - фаза срабатывания обработчика: погружение/всплытие
+                          2. {
+                                    once: true/false    - после выполнения обработчик удалить/неУдалять
+                                    capture: true/false - фаза срабатывания обработчика: погружение/всплытие
+                                    passive: true/false - если true, то сообщает браузеру, что обработчик не вызовет
+                                                          preventDefault(), и браузер сразу выполнит действие по умолчанию, 
+                                                          не ожидая других обработчиков.
+                              }
+
+> elem.removeEventListener(event, handler, [options]) - удаляет обработчик события handler (нужна та же фаза).
+> event.preventDefault() - отменить действие браузера по умолчанию.
+> event.defaultPrevented - если true, то событие по умолчанию отменено (лучше чем event.stopPropagation()).
+> event.stopPropagation() - останавливает всплытие дальше.
+> event.stopImmediatePropagation() - предотвращает всплытие включая текущий элемент.
+> event.eventPhase - фаза, на которой сработал обработчик (погружение = 1, фаза target = 2, всплытие = 3).
+> event.currentTarget === this - элемент, на котором в данный момент выполняется обработчик (меняется по мере всплытия).
+> event.target - самый глубоко вложенный элемент, на котором сработал слушатель (не изменнен в процессе всплытия).
+> event.buttons - возвращает номер кнопки мыши (0 - левая, 1 - средняя, 2 - правая и т.д.).
+> event.clientX/clientY/pageX/pageY - | координаты курсора относительно окна/документа
+
+>> События клавиатуры:
+      > 'keydown' - срабатывает при нажатии клавиши
+      > 'keyup'   - срабатывает при отпускании клавиши
+
+>> Автоповтор - при долгом нажатии клавиши, событие 'keydown' срабатывает повторно, пока не сработает 'keyup'.
+>> event.repeat === true - для событий вызванных автоповтором.
+
+>> Клавиши-модификаторы: event.shiftKey - клавиша Shift         | - true, если нажаты во время срабатывания события
+                         event.altKey   - клавиша Alt           |
+                         event.ctrlKey  - клавиша Ctrl          |
+                         event.metaKey  - клавиша Cmd для Mac   |
+
+>> event.key - символ нажатой клавиши (буква, цифра, Enter, Tab, F1 и т.д.).
+>> event.code - код нажатой клавиши (Key<буква>, Digit<цифра>, Enter, Tab, F1 и т.д.).
+
+>> Делегирование событий - один обработчик на общего предка обрабатываемых элементов.
+      Способы делегирования: 
+            1. Простые проверки
+            2. Атрибуты data- (этот способ называют "behavior" (поведение))
+
+>> Создание пользовательских событий:
+      1. new CustomEvent(type, options) - лучший способ для пользовательских событий
+            > type - строка с названием события.
+            > options === {
+                  bubbles: true/false    - всплытие разрешить/запретить
+                  cancelable: true/false - отмену события по умолчанию разрешить/запретить
+                  composed: true/false   - всплытие за пределы Shadow DOM разрешить/запретить 
+                  detail: { ... }        - объект для передачи любых пользовательских данных обработчику событий
+            }
+
+      2. new Event(type, options) - как CustomEvent, только без свойства detail в options.
+      3. Конструкторы различных UI Event: UIEvent, FocusEvent, MouseEvent, WheelEvent, KeyboardEvent, ...
+
+>> elem.dispatchEvent(event) - запускает объект-событие event на elem. 
+                               Возвращает false, если какой-либо обработчик события вызвал event.preventDefault().
+
+>> В событиях 'mouseover'/'mouseenter': event.target        - элемент, НА который курсор перешел.
+                                        event.relatedTarget - элемент, С которого курсор ушел (может быть null).
+
+>> В событиях 'mouseout'/'mouseleave': event.target - элемент, С которого курсор ушел.
+                                       event.relatedTarget - элемент, НА который курсор перешел (может быть null).
+
+>> В событиях 'mouseover'/'mouseout' курсор всегда над самым глубоко вложенным элементом.
+
+>> События 'mouseenter'/'mouseleave' как 'mouseover'/'mouseout', но: 1. Не срабатывают на children;
+                                                                     2. Не всплывают (невозвожно делегирование).
+                                    
+>> Событие 'scroll' срабатывает при прокрутке страницы.
+                        
+>> document.elementFromPoint(clientX, clientY) - возвращает наиболее глубоко вложенный элемент по заданным координатам.
+
+>> Базовый алгоритм Drag'n'Drop:
+      1. Подготовить к перемещению элемент :
+            - mousedown
+            - ondragstart return false
+            - position absolute
+            - z-index 1000
+      2. Перемещать элемент:
+            - mousemove
+            - left top event.pageX evemt.pageY
+      3. Если нужно, узнать, над каким элементом (droppable) в данный момент находится переносимый элемент (draggable)
+            - elem.hidden true -> elemBelow document.elementFromPoint -> elem.hidden false
+      4. Остановить перенос:
+            - mouseup
+            - removeEventListener mousemove mouseup
+
+>> Свойства Pointer Events:
+      1. Свойства, что и у Mouse Events.
+      2. pointerId - id указателя, который вызвал событие (число генерируется движком).
+      3. pointerType - тип указателя. Строковое значение: 'mouse'/'pen'/'touch'.
+      4. isPrimary === true для основного (1-го) указателя, который вызвал событие.
+      5. width/height - ширина/высота области соприкосновения указателя с устройством. === 1, если не поддерживается устройством.
+      6. pressure - степень давления указателя в диапазоне от 0 до 1. === 0.5, если не поддерживается устройством.
+      7. tangentialPressure - нормализованное тангенциальное давление.
+      8. tiltX/tiltY/twist - положение пера относительно сенсорной поверхности.
+
+>> События указателя (Pointer Events) аналогичны Mouse Events: 'pointer<событие>' аналог 'mouse<событие>'.
+      
+>> Событие указателя 'pointercancel' - срабатывает, когда действие с указателем прерывается 
+                                       и события указателя больше не генерируются. 
+                                       Причины срабатывания 'pointercancel':
+                                          - выключение устройства
+                                          - нажатие кнопки "Home"
+                                          - смена ориентации устройства в пространстве
+                                          - сработало событие по умолчанию
+                                          - превышение максимально допустимого количества нажатий на экран
+                                          - движок решил, что нажатие вызвано случайно
+                                          
+>> Событие 'gotpointercapture' - срабатывает при захвате указателя (setPointerCapture).
+>> Событие 'lostpointercapture' - срабатывает при освобождении от захвата указателя (pointerup, pointercancel, releasePointerCapture).
+
+>> { touch-action: none; } - CSS-свойство, чтобы предотвратить срабатывания события по умолчанию
+
+>> elem.setPointerCapture(pointerId) - привязывает все дальнейшие Pointer Events с указанным pointerId к элементу.
+                                       Захват указателя упрощает Drag'n'Drop.
+                                       Освобождается от захвата при:
+                                          1. Событии 'pointerup';
+                                          2. Событии 'pointercancel';
+                                          3. Удалении элемента из документа;
+                                          4. Вызове elem.releasePointerCapture(pointerId).
+
++ Устаревшие события, методы и свойства
+      event.which - возвращает номер кнопки мыши (0 - левая, 1 - средняя, 2 - правая и т.д.);
+      event.keyCode - аналог event.key;
+      event.charCode - аналог event.char;
+      'keypress' - срабатывает, когда нажимается клавиша создающая символ.
 
 
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\
