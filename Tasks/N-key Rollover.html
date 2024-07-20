@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Отслеживание одновременного нажатия клавишь</title>
+  </head>
+  <body>
+    <script>
+      function runOnKey(func, ...codes) {
+        const pressedCodes = new Set()
+
+        document.addEventListener('keydown', keydown)
+        document.addEventListener('keyup', keyup)
+
+        function keydown(event) {
+          pressedCodes.add(event.code)
+
+          for (let code of codes) {
+            if (!pressedCodes.has(code)) return
+          }
+
+          func()
+        }
+
+        function keyup() {
+          pressedCodes.clear()
+        }
+      }
+
+      runOnKey(
+        () => console.log('You pressed keys Q + W + E'),
+        'KeyQ',
+        'KeyW',
+        'KeyE'
+      )
+    </script>
+  </body>
+</html>

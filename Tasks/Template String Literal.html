@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Template String Literal</title>
+  </head>
+  <body>
+    <script>
+      let str = 'A'
+      let num = 99
+
+      function tag(strings, arg1, arg2) {
+        console.log(strings)
+        console.log(arg1, arg2)
+        console.log(strings.raw)
+      }
+
+      tag`That ${str} isn't eaquel ${num}!`
+    </script>
+  </body>
+</html>
