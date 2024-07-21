@@ -175,14 +175,18 @@ value++   > возвращает старое значение
             > Не могут        быть вызваны с new
 
       3. Named Function Expression (NFE)               : let foo = function bar() {} 
-            > Function Expression с именем 
-            > Для рекурсивных вызовов 
-            > Недоступна за пределами фу-и;
+            > Function Expression с именем;
+            > Для рекурсивных вызовов;
+            > Недоступна за пределами фу-и.
 
       4. new Function([arg1, ..., argN], functionBody) : let foo = new Function('a', 'b', 'return a + b')
-            > Имеет [[Environment]], ссылающийся на глобальное лексическое окружение
+            > Имеет [[Environment]], ссылающийся на глобальное лексическое окружение.
 
-      5. Шаблонные функции - foo`some text and ${arg1} and ${arg2}`
+      5. Tagged Template String Literal (теговый шаблон) - tag`first str ${arg1} and ${arg2} third str`.
+            > function tag(strings, ...expressions) {} 
+                  > strings       - массив строк между ${expression}.
+                  > expressions   - массив выражений ${expression}.
+                  > strings.raw() - исходная строка.
 
 
 >> new.target - исп. внутри фу-и, чтобы проверить вызвана ли фу-я при помощи new
