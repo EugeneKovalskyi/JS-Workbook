@@ -1,17 +1,18 @@
 # Technology stack
-	- Strong:
-		- JavaScript
-		- CSS / SASS / SCSS
-		- HTML
-		- Jest
-		- Vite
 
-	- Weak:
-		- ReactJS
-		- NodeJS
-		- Git
-		- Electron  
+- Strong:
+	- JavaScript
+	- CSS / SASS / SCSS
+	- HTML
+	- Jest
+	- Vite
 
-	- Next to learn:
-		- TypeScript
-		- Axios
+- Weak:
+	- ReactJS
+	- NodeJS
+	- Git
+	- Electron  
+
+- Next to learn:
+	- TypeScript
+	- Axios
