@@ -4,15 +4,18 @@
 - JavaScript
 - CSS / SASS / SCSS
 - HTML
+
+### Weak:
+- React
+- Next
+- Node
+- Git
 - Jest
 - Vite
 
-### Weak:
-- ReactJS
-- NodeJS
-- Git
-- Electron  
-
 ### Next to learn:
 - TypeScript
+- Nest
 - Axios
+- Express
+- PostgeSQL
