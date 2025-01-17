@@ -1377,7 +1377,7 @@ value++   > возвращает старое значение
       4. Поле event - кастомное событие
       5. Поле retry - время в миллисекундах, спустя которое будет попытка переподключения к серверу
 
-> Пример передаваемой строки в NodeJS: res.write('retry: 15000\nevent: customEvent\ndata: someData\nid: 1\n\n')
+> Пример передаваемой строки: 'retry: 15000\nevent: customEvent\ndata: someData\nid: 1\n\n'.
 
 
 ///////////////////////
@@ -1398,14 +1398,17 @@ value++   > возвращает старое значение
 * * * Библиотеки и Фреймворки * * *
 -----------------------------------
 
+>> cross-env = позволяет запускать скрипты, которые используют и устанавливают переменные окружения
+>> dotenv = позволяет загружать переменные окружения в process.env из файла .env
+>> nodemon = автоматически перезапускает сервер после изменений в файлах папки проекта.
+
 ////////////
 1.   Jest  
 ////////////
 
-Jest - фреймворк для тестирования JavaScript. Работает с ReactJS, NodeJS, Babel, TypeScript, Vue, Angular.
+>> Jest - фреймворк для тестирования JavaScript.
 
 >> Цель автотестирования - проверка соответствия ПО предъявляемым требованиям.
-
 >> Регрессионное тестирование - проверка целосности старого ПО, после внесения новых изменений.
 
 >> Функциональное тестирование:
@@ -1415,7 +1418,6 @@ Jest - фреймворк для тестирования JavaScript. Работ
       > E2E (end-to-end) - полная функциональность частей приложения (регистрация, авторизация, оплата).
 
 >> Expect-методы - сопоставляют фактический результат от ожидаемого.
-
 >> Mock - тестовый двойник, то есть тестовые значения, которые заменяют производственный код во время выполнения тестов.
 
 >> Mock-функции:
@@ -1431,9 +1433,9 @@ Jest - фреймворк для тестирования JavaScript. Работ
                   ~ export const bar = jest.fn() и т.д.
 
 
-//////////////
+////////////
 2.   Node
-//////////////
+////////////
 
 >> Команды npm:
     > npm -h (--help)               // вызов справки
@@ -1448,42 +1450,26 @@ Jest - фреймворк для тестирования JavaScript. Работ
     > npm -B (--save-bundle)        // записывает в package.json в bundleDependencies список установленных пакетов
     > npm pack                      // создает tarball-файл, содержащий файлы проекта и пакеты из bundleDependencies
 
->> Node.js - среда выполнения кода JavaScript:
-    - на основе JS Chrome V8
+>> NodeJS - среда выполнения кода JavaScript:
+    - NodeJS = V8 + LibUV
     - позволяет выполнять JS вне веб-браузера
     - предназначен для создания серверных приложений
     - хорошо подходит для обработки потоковых данных в реальном времени
-    - НЕ подходит для решения задач, требующих много ресурсов
+    - НЕ подходит для решения задач, требующих много ресурсов     
 
->> Особенности Node.js:
-    1. global
-    2. Нет взаимодействия с DOM
-    3. Есть доступ к файловой системе клиента       
-
->> Node REPL - интерактивный интерпретатор (Read-Evaluate-Print-Loop)
-
->> Встроенные модули Node.js:
-    - path
-    - http
-    - js (можно работать через Promise)
-    - os
-    - crypto
-    
->> runtime - означает запущенный процесс в ОЗУ, который откликается на команды
-
->> LibUV - библиотека на C++, которая обеспечивает поддержку неблокирующих операций ввода-вывода
->> C++ Bindings - термин выделяющий группу библиотек (посредники), которые позволяют использовать в Node.js функционал библиотеки LibUV
->> Thread Scheduler (Планировщик потоков) - часть ОС, которая отвечает за паралельное выполнение задач
-
->> worker_threads - модуль в Node.js позволяющий управлять потоками из кода
-
->> Демультиплексор событий - собирает и ставит в очередь события I/O
+>> Node REPL - интерактивный интерпретатор (Read-Evaluate-Print-Loop).    
+>> runtime - означает запущенный процесс в ОЗУ, который откликается на команды.
+>> LibUV - библиотека на C, которая обеспечивает неблокирующий кроссплатформенный I/O и предоставляет Event Loop.
+>> C++ Bindings - группа библиотек (посредники), которые позволяют использовать в NodeJS функционал библиотеки LibUV.
+>> Thread Scheduler (Планировщик потоков) - часть ОС, которая отвечает за паралельное выполнение задач.
+>> worker_threads - модуль в NodeJS позволяющий управлять потоками из кода.
+>> Демультиплексор событий - собирает и ставит в очередь события I/O.
 
 >> Принцип работы шаблона REACTOR:
     Приложение[I/O <--> Обработка] --> Демультиплексор событий --> Очередь событий --> Event Loop <--> Приложение
 
 >> Processes and threads (процессы и потоки):
-    1. Node.js имеет  1 поток, который обрабатывает все запросы
+    1. NodeJS имеет 1 поток, который обрабатывает все запросы
     2. LibUV обеспечивает поддержку многопоточных операций (ассинхронные неблокирующие операции)
 
 >> LibUV: 1. Event loop - асинхронно обрабатывает событийные операции (вызываются фу-и подписанные на события)
@@ -1496,7 +1482,7 @@ Jest - фреймворк для тестирования JavaScript. Работ
     2. Promise
     3. Timers ( setTimeout, setInterval )
     4. Pending ( Input/Output callbacks отложенные до след. итерации event loop)
-    5. Idle, Prepare ( внутренние служебные задачи Node.js )
+    5. Idle, Prepare ( внутренние служебные задачи NodeJS )
     6. Poll ( event loop получает и выполняет задачи Input/Output )
     7. Check ( setImmediate )
     8. Close ( close event callbacks )
@@ -1515,23 +1501,46 @@ Jest - фреймворк для тестирования JavaScript. Работ
     2. module.exports.foo = function () {}
     3. module.exports = function () {}      // экспорт по умолчанию
 
->> Внутреннее устройство модуля в Node.js (common.js):
+>> Внутреннее устройство модуля в NodeJS (common.js):
     (function (exports, require, module, __filename, __dirname) {
         console.log(arguments.callee.toString())
     })
 
->> Streams (потоки):
-    - Readable
-    - Writable
-    - Duplex (Readable + Writable)
-    - Transform (как Duplex, но может изменять данные по мере чтения)
+>> Stream - интерфейс для работы с фрагментами данных (потоки).
+    > Типы:
+      - Writable
+      - Readable
+      - Duplex (Readable + Writable)
+      - Transform (как Duplex, но может изменять данные по мере чтения и записи)
+
+    > Streams являются экземплярами EventEmitter.
+    > fs.createWriteStream(path) - создать поток для записи.
+    > fs.createReadStream(path) - создать поток для чтения (по умолчанию размер каждого фрагмента 64 kB).
+
+>> Модули в NodeJS - встроенные переиспользуемые блоки кода:
+      > process - предоставляет информацию о текущем процессе NodeJS и контроль над ним.
+      > path - предоставляет методы для работы с путями.
+      > fs - позволяет взаимодействовать с файловой системой.
+      > os - позволяет взаимодействовать с ОС.
+      > cluster - позволяет исп. многоядерность, то есть запускать несколько процессов.
+      > events - позволяет работать с событиями (обработчики события вызываются в порядке их добавления и СИНХРОННО).
+      > stream - позволяет создавать НОВЫЕ ТИПЫ экземпляров Streams.
+      > http - позволяет передавать/получать данные по протоколу HTTP.
+
+>> http.createServer((req, res) => {
+     > req - readable stream
+     > res - writable stream
+     > res.write(data, encoding, callback) - отправляет data, вызывает callback, когда data будет отправлен.
+     > res.end(data, encoding, callback) - как и res.write, но также сигнализирует серверу о завершении ответа на запрос.
+     !!! Метод res.end() НЕОБХОДИМО вызывать в каждом ответе, чтобы вернуть контроль браузеру.
+})
 
 
 ////////////
 3.   Vite
 ////////////
 
-Vite - инструмент сборки web-приложений.
+>> Vite - инструмент сборки web-приложений.
 
 >> Основные части:
     1. Dependencies (зависимости) - в основном native JS, редко изменяется.
@@ -1547,7 +1556,6 @@ Vite - инструмент сборки web-приложений.
 /////////////
 
 >> React - JS-библиотека для построения интерактивного UI.
-
 >> React Native - фреймворк для разработки Android и IOS приложений.
 
 >> Этапы отрисовки компонента:
@@ -1958,3 +1966,61 @@ async function subscribe() {
             await subscribe()
       }
 }
+
+
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+7.   Работа с файловой системой (node:fs) через Promise
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+const path = require('path')
+const filePath = path.resolve(__dirname, 'file.txt')
+
+      1. Современный способ
+
+const fsPromise = require('fs/promises')
+
+fsPromise.writeFile(filePath, 'some text')
+.then(() => fsPromise.appendFile(filePath, '\nHello World!'))
+.then(() => fsPromise.readFile(filePath, { encoding: 'utf-8' }))
+.then(() => fsPromise.rm(filePath))
+.catch((error) => console.log(error))
+
+      2. Старый способ
+
+const fs = require('fs')
+
+async function writeFileAsync(path, data) {
+	return new Promise((resolve, reject) => fs.writeFile(path, data, (error) => {
+		if (error) return reject(error.message)
+		else resolve()
+	}))
+}
+
+async function appendFileAsync(path, data) {
+	return new Promise((resolve, reject) => fs.appendFile(path, data, (error) => {
+		if (error) reject(error.message)
+		else resolve()
+	}))
+}
+
+async function readFileAsync(path) {
+	return new Promise((resolve, reject) => fs.readFile(path, { encoding: 'utf-8' }, (error, data) => {
+		if (error) reject(error.message)
+		else resolve(data)
+	}))
+}
+
+async function removeFileAsync(path) {
+	return new Promise((resolve, reject) => fs.rm(path, (error) => {
+		if (error) reject(error.message)
+		else resolve()
+	}))
+}
+
+writeFileAsync(filePath, 'some text')
+	.then(() => appendFileAsync(filePath, '\nHello'))
+	.then(() => appendFileAsync(filePath, ' World!'))
+	.then(() => readFileAsync(filePath))
+	.then((data) => console.log(data))
+	.then(() => removeFileAsync(filePath))
+	.catch(error => console.log(error))
