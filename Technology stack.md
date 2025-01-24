@@ -1,21 +1,17 @@
 # Technology stack
 
-### Strong:
 - JavaScript
-- CSS / SASS / SCSS
-- HTML
-
-### Weak:
 - React
 - Next
+
 - Node
-- Git
+
+- PostgeSQL
+
 - Jest
 - Vite
+- Git
 
-### Next to learn:
-- TypeScript
-- Nest
-- Axios
-- Express
-- PostgeSQL
+- HTML
+- CSS / SASS / SCSS
+- TailwindCSS
