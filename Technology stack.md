@@ -1,17 +1,20 @@
 # Technology stack
 
-- JavaScript
-- React
-- Next
+- JavaScript	✔
+- React ✔
+- Next	✔
+- TypeScript
 
-- Node
+- Node	✔
+- PostgeSQL	✔
+- Knex
+- Prisma
+-	Nest
 
-- PostgeSQL
+- Jest	✔
+- Vite	✔
+- Git		✔
 
-- Jest
-- Vite
-- Git
-
-- HTML
-- CSS / SASS / SCSS
-- TailwindCSS
+- HTML	✔
+- CSS / SASS / SCSS	✔
+- TailwindCSS	✔
