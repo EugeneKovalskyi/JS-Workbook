@@ -7,9 +7,11 @@
 
 - Node	✔
 - PostgeSQL	✔
+- Express
 - Knex
 - Prisma
 -	Nest
+- GraphQL
 
 - Jest	✔
 - Vite	✔
