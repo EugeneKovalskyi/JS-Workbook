@@ -3,7 +3,7 @@
 - JavaScript	✔
 - React ✔
 - Next	✔
-- TypeScript
+- TypeScript ✔
 
 - Node	✔
 - PostgeSQL	✔
@@ -15,6 +15,7 @@
 
 - Jest	✔
 - Vite	✔
+- Vitest ✔
 - Git		✔
 
 - HTML	✔
