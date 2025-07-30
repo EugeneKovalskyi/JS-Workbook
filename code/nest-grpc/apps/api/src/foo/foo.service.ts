@@ -1,4 +1,4 @@
-import { Inject, Injectable, OnModuleInit } from '@nestjs/common'
+import { Inject, Injectable, InternalServerErrorException, OnModuleInit } from '@nestjs/common'
 import { 
 	FOO_PACKAGE_NAME, 
 	FOO_SERVICE_NAME, 
@@ -8,7 +8,7 @@ import {
 	Time
 } from '../../../foo/src/types'
 import { ClientGrpc } from '@nestjs/microservices'
-import { ReplaySubject } from 'rxjs'
+import { catchError, ReplaySubject } from 'rxjs'
 
 @Injectable()
 export class FooService implements OnModuleInit {
@@ -41,13 +41,16 @@ export class FooService implements OnModuleInit {
 		}
 		
 		const error = (e: Error) => {
-			console.log(e)
+			console.log(e.message)
+			catchError((err, caught) => caught)
 		}
 
 		const interval = setInterval(() => replySubject.next({ time: Date.now() }), 1000)
 		
 		this.fooService.getTime(replySubject).subscribe({ next, complete, error})
-		
-		setTimeout(() => clearInterval(interval), 5050)
+		setTimeout(() => {
+			clearInterval(interval)
+			replySubject.complete()
+		}, 5050)
 	}
 }

@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { Foo, GetFooDTO, PostFooDTO, Time } from './types'
-import { Observable, Subject } from 'rxjs'
+import { catchError, Observable, Subject } from 'rxjs'
 
 @Injectable()
 export class FooService {
@@ -56,11 +56,12 @@ export class FooService {
 		}
 
 		const error = (e: Error) => {
-			console.error(e.message)
+			console.log(e.message)
+			catchError((err, caught) => caught)
 		}
 
 		timeStream.subscribe({ next, complete, error })
 
-		return subject.asObservable() 
+		return subject.asObservable()
 	}
 }
