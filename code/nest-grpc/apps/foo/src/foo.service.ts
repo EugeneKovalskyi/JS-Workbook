@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
-import { Foo, GetFooDTO, PostFooDTO, Time } from './types/foo'
+import { Foo, GetFooDTO, PostFooDTO, Time } from './types'
 import { Observable, Subject } from 'rxjs'
 
 @Injectable()

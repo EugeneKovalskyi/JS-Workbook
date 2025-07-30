@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body,  Param } from '@nestjs/common';
 import { FooService } from './foo.service';
-import { PostFooDTO } from '../../../foo/src/types/foo';
+import { PostFooDTO } from '../../../foo/src/types';
 
 @Controller('foo')
 export class FooController {

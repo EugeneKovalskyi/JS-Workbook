@@ -1,6 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { FooService } from './foo.service';
-import { Foo, FooServiceController, FooServiceControllerMethods, GetFooDTO, PostFooDTO, Time } from './types/foo';
+import { Foo, FooServiceController, FooServiceControllerMethods, GetFooDTO, PostFooDTO, Time } from './types';
 import { Observable } from 'rxjs';
 
 @Controller()

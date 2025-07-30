@@ -6,7 +6,7 @@ import {
 	GetFooDTO,
 	PostFooDTO,
 	Time
-} from '../../../foo/src/types/foo'
+} from '../../../foo/src/types'
 import { ClientGrpc } from '@nestjs/microservices'
 import { ReplaySubject } from 'rxjs'
 

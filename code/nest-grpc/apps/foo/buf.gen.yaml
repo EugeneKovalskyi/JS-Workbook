@@ -5,4 +5,5 @@ plugins:
     out: src/types
     opt: 
       - nestJs=true
+      - exportCommonSymbols=false
     strategy: all

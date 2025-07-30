@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { FooService } from './foo.service';
 import { FooController } from './foo.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { FOO_PACKAGE_NAME } from '../../../foo/src/types/foo';
+import { FOO_PACKAGE_NAME } from '../../../foo/src/types';
 import { join } from 'path';
 
 @Module({
@@ -13,7 +13,8 @@ import { join } from 'path';
         transport: Transport.GRPC,
         options: {
           package: FOO_PACKAGE_NAME,
-          protoPath: join(__dirname, `../foo/proto/${FOO_PACKAGE_NAME}.proto`)
+          protoPath: join(__dirname, `../foo/proto/${FOO_PACKAGE_NAME}_services.proto`),
+			    url: 'localhost:50051'
         }
       }
     ])

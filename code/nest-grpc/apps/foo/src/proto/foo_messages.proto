@@ -28,9 +28,3 @@ message GetFooDTO {
 message Time {
 	uint64 time = 1;
 }
-
-service FooService {
-	rpc PostFoo (PostFooDTO) returns (Foo) {}
-	rpc GetFoo (GetFooDTO) returns (Foo) {}
-	rpc GetTime (stream Time) returns (stream Time) {}
-}

@@ -2,41 +2,12 @@
 // versions:
 //   protoc-gen-ts_proto  v2.7.5
 //   protoc               unknown
-// source: foo.proto
+// source: foo_services.proto
 
 /* eslint-disable */
 import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";
 import { Observable } from "rxjs";
-import { Timestamp } from "./google/protobuf/timestamp";
-
-export const protobufPackage = "foo";
-
-export interface User {
-  id: number;
-  name: string;
-}
-
-export interface Foo {
-  id: number;
-  name: string;
-  isPending: boolean;
-  createdAt?: Timestamp | undefined;
-  user?: User | undefined;
-}
-
-export interface PostFooDTO {
-  name: string;
-}
-
-export interface GetFooDTO {
-  id: number;
-}
-
-export interface Time {
-  time: number;
-}
-
-export const FOO_PACKAGE_NAME = "foo";
+import { Foo, GetFooDTO, PostFooDTO, Time } from "./foo_messages";
 
 export interface FooServiceClient {
   postFoo(request: PostFooDTO): Observable<Foo>;
