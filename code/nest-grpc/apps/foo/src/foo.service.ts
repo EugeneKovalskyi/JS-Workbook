@@ -50,17 +50,13 @@ export class FooService {
 			subject.next({ time: Date.now() })
 		}
 
-		const complete = () => {
-			console.log(`Stream completed from client!`)
-			subject.complete()
-		}
-
 		const error = (e: Error) => {
 			console.log(e.message)
 			catchError((err, caught) => caught)
+			subject.complete()
 		}
 
-		timeStream.subscribe({ next, complete, error })
+		timeStream.subscribe({ next, error })
 
 		return subject.asObservable()
 	}

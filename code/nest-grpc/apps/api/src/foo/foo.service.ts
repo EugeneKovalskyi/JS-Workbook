@@ -1,4 +1,4 @@
-import { Inject, Injectable, InternalServerErrorException, OnModuleInit } from '@nestjs/common'
+import { Inject, Injectable, OnModuleInit } from '@nestjs/common'
 import { 
 	FOO_PACKAGE_NAME, 
 	FOO_SERVICE_NAME, 
@@ -35,22 +35,21 @@ export class FooService implements OnModuleInit {
 			console.log(`Response time lag: ${Date.now() - time}`)
 		}
 		
-		const complete = () => {
-			console.log('Stream completed from server!')
-			replySubject.complete()
-		}
-		
 		const error = (e: Error) => {
 			console.log(e.message)
 			catchError((err, caught) => caught)
+			replySubject.complete()
 		}
 
 		const interval = setInterval(() => replySubject.next({ time: Date.now() }), 1000)
 		
-		this.fooService.getTime(replySubject).subscribe({ next, complete, error})
+		this.fooService.getTime(replySubject).subscribe({ next, error})
+		
 		setTimeout(() => {
 			clearInterval(interval)
 			replySubject.complete()
 		}, 5050)
+
+		return `Connection started at: ${(new Date).toLocaleTimeString()}`
 	}
 }
