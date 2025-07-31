@@ -18,6 +18,6 @@ export class FooController {
 
   @Post('time')
   getTime() {
-    return this.fooService.getTime()
+    this.fooService.getTime()
   }
 }

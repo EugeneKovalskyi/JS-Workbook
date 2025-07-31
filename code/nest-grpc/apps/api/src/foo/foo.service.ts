@@ -34,6 +34,12 @@ export class FooService implements OnModuleInit {
 		const next = ({ time }: Time) => {
 			console.log(`Response time lag: ${Date.now() - time}`)
 		}
+
+		const complete = () => {
+			console.log('Client completed!')
+			clearInterval(interval)
+			replySubject.complete()
+		}
 		
 		const error = (e: Error) => {
 			console.log(e.message)
@@ -42,14 +48,12 @@ export class FooService implements OnModuleInit {
 		}
 
 		const interval = setInterval(() => replySubject.next({ time: Date.now() }), 1000)
-		
-		this.fooService.getTime(replySubject).subscribe({ next, error})
+
+		this.fooService.getTime(replySubject).subscribe({ next, error, complete})
 		
 		setTimeout(() => {
 			clearInterval(interval)
 			replySubject.complete()
-		}, 5050)
-
-		return `Connection started at: ${(new Date).toLocaleTimeString()}`
+		}, 5100)
 	}
 }
