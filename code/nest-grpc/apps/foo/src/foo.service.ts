@@ -63,7 +63,7 @@ export class FooService {
 		
 		timeStream.subscribe({ next, error, complete })
 		
-		setTimeout(() => subject.complete(), 3100)
+		setTimeout(() => subject.complete(), 2100)
 
 		return subject.asObservable()
 	}

@@ -47,7 +47,9 @@ export class FooService implements OnModuleInit {
 			replySubject.complete()
 		}
 
-		const interval = setInterval(() => replySubject.next({ time: Date.now() }), 1000)
+		const interval = setInterval(() => {
+			replySubject.next({ time: Date.now() })
+		}, 1000)
 
 		this.fooService.getTime(replySubject).subscribe({ next, error, complete})
 		
