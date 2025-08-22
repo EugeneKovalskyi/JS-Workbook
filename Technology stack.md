@@ -1,23 +1,31 @@
 # Technology stack
 
 - JavaScript	✔
-- React ✔
-- Next	✔
 - TypeScript ✔
 
 - Node	✔
+-	Nest ✔
+- Express ✔
+
+- JWT
+- OAuth2
+
+- SQLite ✔
 - PostgeSQL	✔
-- Express
-- Knex
-- Prisma
--	Nest
-- GraphQL
+- Prisma ✔
+- Knex ✔
+
+- gRPC ✔
+- GraphQL ✔
 
 - Jest	✔
 - Vite	✔
 - Vitest ✔
-- Git		✔
 
-- HTML	✔
-- CSS / SASS / SCSS	✔
+- Git		✔
+- Next	✔
+- React ✔
+- i18n ✔
 - TailwindCSS	✔
+- CSS / SASS / SCSS	✔
+- HTML	✔
