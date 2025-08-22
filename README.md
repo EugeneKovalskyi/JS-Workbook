@@ -1,3 +1,7 @@
+> [!TIP]
+> Схемы к конспекту на Miro:
+> https://miro.com/app/board/uXjVI1veXvo=/
+
 > [!NOTE]
 > Маркировка текста в Workbook.txt осуществляется в соответствии с расширениями vscode: 
 > - Txt Syntax
