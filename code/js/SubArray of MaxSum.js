@@ -1,0 +1,25 @@
+///		Подмассив наибольшей суммы
+///		Задача: найти непрерывный подмассив в arr, сумма элементов в котором максимальна.
+
+function getMaxSubSum(array) {
+	let result = 0
+	let temp = 0
+
+	for (let i = 0; i < array.length; i++) {
+		temp += array[i]
+
+		if (temp < 0) 
+			temp = 0
+		if (result < temp) 
+			result = temp
+	}
+
+	return result
+}
+
+console.log(getMaxSubSum([-1, 2, 3, -9]))
+console.log(getMaxSubSum([2, -1, 2, 3, -9]))
+console.log(getMaxSubSum([-1, 2, 3, -9, 11]))
+console.log(getMaxSubSum([-2, -1, 1, 2]))
+console.log(getMaxSubSum([100, -9, 2, -3, 5]))
+console.log(getMaxSubSum([1, 2, 3]))
