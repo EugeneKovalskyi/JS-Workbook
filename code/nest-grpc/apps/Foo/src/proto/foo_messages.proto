@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package Foo;
+
+import "google/protobuf/timestamp.proto";
+
+message User {
+	int32 id = 1;
+	string name = 2;
+}
+
+message Foo {
+	int32 id = 1;
+	string name = 2;
+	bool is_pending = 3;
+	optional google.protobuf.Timestamp created_at = 4;
+	optional User user = 5;
+}
+
+message PostFooDTO {
+	string name = 1;
+}
+
+message GetFooDTO {
+	int32 id = 1;
+}
+
+message Time {
+	uint64 time = 1;
+}

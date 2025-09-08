@@ -1,0 +1,38 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id 							Int 						@id @default(autoincrement())
+  name 						String 					@unique
+  role 						String
+  password 				String
+	device          Device[]
+
+  @@map("users")
+  @@index(name)
+}
+
+model Device {
+  id              Int             @id @default(autoincrement())
+  name            String          
+  userId          Int             @map("user_id")
+  user            User            @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+	refreshToken 		RefreshToken?
+
+  @@map("devices")
+}
+
+model RefreshToken {
+	id 							Int 						@id @default(autoincrement())
+	value 					String 					@unique
+  deviceId        Int             @map("device_id") @unique
+  device          Device          @relation(fields: [deviceId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+	@@map("refresh_tokens")
+}
