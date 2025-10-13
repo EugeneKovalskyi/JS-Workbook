@@ -20,7 +20,9 @@ export class AccessGuard implements CanActivate {
 
 		if (token)
 			try {
-				await this.tokensService.verifyAccess(token)
+				const payload = await this.tokensService.verifyAccess(token)
+				req['payload'] = payload
+
 				return true
 				
 			} catch (error) {

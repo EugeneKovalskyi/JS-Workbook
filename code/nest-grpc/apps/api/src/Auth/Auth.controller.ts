@@ -13,10 +13,10 @@ import {
   Res,
   UseGuards
 } from '@nestjs/common'
-import { AuthService } from './Auth.service'
+import { Cookies } from '../common/decorators'
 import { RefreshGuard } from './guards/Refresh.guard'
-import { Cookies } from '../common/decorators/Cookies.decorator'
 import { AccessGuard } from '../common/guards/Access.guard'
+import { AuthService } from './Auth.service'
 
 @Controller('auth')
 export class AuthController {

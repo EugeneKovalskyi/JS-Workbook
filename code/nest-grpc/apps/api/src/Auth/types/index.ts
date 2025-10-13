@@ -1,5 +1,9 @@
 import type { Request } from 'express'
 
+export interface AccessRequest extends Request {
+	payload: IPayload
+}
+
 export interface RefreshRequest extends Request {
 	refreshId: number
 	payload: IPayload
