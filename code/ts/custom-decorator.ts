@@ -6,10 +6,6 @@ const ERROR = '\x1b[1;31mERROR\x1b[0m'
 const PROPERTY = '\x1b[2;32mPROPERTY\x1b[0m'
 const CACHE = '\x1b[1;38;5;215mCACHE\x1b[0m'
 
-const DECO = {
-  Max
-}
-
 const METADATA = {} as any
 
 //* Class Decorator
@@ -122,7 +118,7 @@ function Max(value: number) {
     })
   }
 }
-// Method decorator uses metadata that param decorator initialized before 
+// Method decorator uses metadata that param decorator initialized before
 function Validate() {
   return function (target: any, methodKey: string, descriptor: any) {
     const originalMethod = target[methodKey]
@@ -140,7 +136,7 @@ function Validate() {
   }
 }
 
-//* Testing decorators
+//* Class
 @Log()
 class User {
   constructor(name: any) {
@@ -164,12 +160,14 @@ class User {
   }
 }
 
+//* Class instance
 const users = [
   new User('Alex'), 
   new User('Bod'),
   // new User(123) //* Error
 ]
 
+//* Execute methods
 for (const user of users){
   const efficiency = Number(Math.random().toFixed(3))
 
@@ -181,11 +179,10 @@ for (const user of users){
 }
 
 //* Decoration sequence
-// showDecorationSequence()
-
+showDecorationSequence()
 function showDecorationSequence() {
 
-	console.log('Decoration sequence:')
+	console.log('\n\x1b[1;37mDecoration sequence:\x1b[0m')
 	@ClassDeco()
 	class Class {
 		@PropDeco()
@@ -222,6 +219,8 @@ function showDecorationSequence() {
 			console.log('\t5. Param deco')
 		}
 	}
+
+	console.log('\n')
 }
 
 

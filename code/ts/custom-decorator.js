@@ -17,9 +17,6 @@ const SUCCESS = '\x1b[1;32mSUCCESS\x1b[0m';
 const ERROR = '\x1b[1;31mERROR\x1b[0m';
 const PROPERTY = '\x1b[2;32mPROPERTY\x1b[0m';
 const CACHE = '\x1b[1;38;5;215mCACHE\x1b[0m';
-const DECO = {
-    Max
-};
 const METADATA = {};
 //* Class Decorator
 function Log() {
@@ -161,9 +158,9 @@ for (const user of users) {
     // user.calcSalary(10000, 10) //* Error
 }
 //* Decoration sequence
-// showDecorationSequence()
+showDecorationSequence();
 function showDecorationSequence() {
-    console.log('Decoration sequence:');
+    console.log('\n\x1b[1;37mDecoration sequence:\x1b[0m');
     let Class = class Class {
         method(param) { }
     };
@@ -205,4 +202,5 @@ function showDecorationSequence() {
             console.log('\t5. Param deco');
         };
     }
+    console.log('\n');
 }
