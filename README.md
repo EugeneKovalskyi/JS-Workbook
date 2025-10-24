@@ -9,7 +9,7 @@
 > - Better Comments
 
 <details>
-  <summary color="blue">Рекомендуемые правила разметки в Workbook.txt</summary>
+  <summary>Рекомендуемые правила разметки в Workbook.txt</summary>
   <span>
 
     ---------------------
@@ -41,7 +41,7 @@
 </details>
 
 <details>
-	<summary><ins>Цветовые настройки Better Comments</ins></summary>
+	<summary><b>Цветовые настройки Better Comments</b></summary>
 
 	"better-comments.tags": [
     {
