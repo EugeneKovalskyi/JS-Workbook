@@ -9,7 +9,7 @@
 > - Better Comments
 
 <details>
-  <summary><ins>Рекомендуемые правила разметки в Workbook.txt</ins></summary>
+  <summary color="blue">Рекомендуемые правила разметки в Workbook.txt</summary>
   <span>
 
     ---------------------
@@ -36,6 +36,7 @@
     # Пример/доп. информация с низким приоритетом
     #! Предостережение
     #: Ключевая информация
+    
   </span>
 </details>
 
@@ -125,4 +126,5 @@
       "italic": false
     }
 	],
+
 </details>
