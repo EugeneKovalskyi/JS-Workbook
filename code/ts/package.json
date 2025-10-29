@@ -6,7 +6,11 @@
   "author": "",
   "type": "commonjs",
   "scripts": {
-    "custom-decorator": "ts-node src/custom-decorator.ts"
+    "_": "ts-node src/_.ts",
+    "argon2-hash": "ts-node src/argon2-hash.ts",
+    "cipher": "ts-node src/cipher.ts",
+    "decorator": "ts-node src/decorator.ts",
+    "dhke": "ts-node src/dhke.ts"
   },
   "devDependencies": {
     "@types/node": "^24.8.1",
