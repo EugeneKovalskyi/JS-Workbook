@@ -6,11 +6,10 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build": "nest build",
-    "start": "nest start",
-    "start:dev": "nest start api --watch",
-    "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/apps/api/main"
+    "buf:gen:api": "cd apps/api && npx buf generate",
+    "buf:gen:foo": "cd apps/foo && npx buf generate",
+    "start:api": "nest start api --watch",
+    "start:foo": "nest start foo --watch"
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.13.4",

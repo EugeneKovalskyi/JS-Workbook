@@ -1,9 +1,0 @@
-version: v2
-
-plugins:
-  - local: ../../node_modules/.bin/protoc-gen-ts_proto
-    out: src/types
-    opt: 
-      - nestJs=true
-      - exportCommonSymbols=false
-    strategy: all

@@ -17,6 +17,10 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
-    "paths": {}
+    "paths": {
+      "#common/*": ["apps/api/src/common/*"],
+      "#modules/*": ["apps/api/src/modules/*"],
+      "#proto/*": ["apps/api/src/proto/*"],
+    }
   }
 }

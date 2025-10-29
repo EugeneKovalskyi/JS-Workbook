@@ -1,8 +1,8 @@
 export const ROLE_KEY = 'ROLE'
 export const ROLE = {
-	ADMIN: 3,
+	ADMIN: 1,
 	MANAGER: 2,
-	USER: 1
+	USER: 3
 } as const
 
 export const ERROR = {
