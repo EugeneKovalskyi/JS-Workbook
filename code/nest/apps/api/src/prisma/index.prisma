@@ -9,13 +9,14 @@ datasource db {
 
 model User {
   id 							Int 						@id @default(autoincrement())
-  name 						String 					@unique
+  name 						String
+  email 					String 					@unique
   role 						Int
-  password 				String
+  password 				String?
 	device          Device[]
 
   @@map("users")
-  @@index(name)
+  @@index(email)
 }
 
 model Device {

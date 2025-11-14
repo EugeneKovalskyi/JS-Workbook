@@ -1,16 +1,16 @@
-import type { AccessRequest } from '#modules/auth/auth.types'
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
+import type { AccessRequestDTO } from '#modules/jwt-auth/jwt-auth.dto'
 import { ROLE } from '../constants'
 
 @Injectable()
 export class RoleGuard implements CanActivate {
 	constructor(private readonly reflector: Reflector) {}
 
-	canActivate(context: ExecutionContext): boolean {
-		const req = context.switchToHttp().getRequest<AccessRequest>()
+	canActivate(ctx: ExecutionContext): boolean {
+		const req = ctx.switchToHttp().getRequest<AccessRequestDTO>()
 		const role = Number(ROLE[req.payload.role])
-		const requiredRole = this.reflector.get<number>('ROLE', context.getHandler())
+		const requiredRole = this.reflector.get<number>('ROLE', ctx.getHandler())
 
 //ISSUE
 // Заменить на разрешения (permissions)

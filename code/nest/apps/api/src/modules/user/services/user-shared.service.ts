@@ -1,14 +1,28 @@
 import type { Device, User } from '@prisma/client'
 import { Injectable } from '@nestjs/common'
+import type { CreateUserByGoogleReqDto } from '../user.dto'
+import { ROLE } from '#common/constants'
 import { PrismaService } from '#common/services/prisma/prisma.service'
 
 @Injectable()
-export class UserShared {
+export class UserSharedService {
 	constructor(private readonly prismaService: PrismaService) {}
 
-	async getUserByName(name: string): Promise<User> {
-		return await this.prismaService.user.findFirstOrThrow({
-			where: { name }
+	async createUserByGoogle(dto: CreateUserByGoogleReqDto): Promise<User> {
+		const { name, email } = dto
+		
+		return await this.prismaService.user.create({
+			data: {
+				name,
+				email,
+				role: ROLE.USER
+			}
+		})
+	}
+
+	async getUserByEmail(email: string): Promise<User | null> {
+		return await this.prismaService.user.findFirst({
+			where: { email }
 		})
 	}
 

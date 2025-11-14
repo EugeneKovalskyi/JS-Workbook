@@ -3,39 +3,32 @@ import {
 	CanActivate,
 	ExecutionContext,
 	Injectable,
-	InternalServerErrorException,
-	UnauthorizedException,
+	UnauthorizedException
 } from '@nestjs/common'
 import { getAccessTokenFromHeader } from '../utils'
 import { TokensService } from '../services/tokens/tokens.service'
 import { ERROR } from '../constants'
 
 @Injectable()
-export class AccessGuard implements CanActivate {
+export class JwtAccessGuard implements CanActivate {
 	constructor(private readonly tokensService: TokensService) {}
 
-	async canActivate(context: ExecutionContext): Promise<boolean> {
-		const req = context.switchToHttp().getRequest<Request>()
+	async canActivate(ctx: ExecutionContext): Promise<boolean> {
+		const req = ctx.switchToHttp().getRequest<Request>()
 		const token = getAccessTokenFromHeader(req)
 
-		if (token)
-			try {
-				const payload = await this.tokensService.verifyAccess(token)
-				req['payload'] = payload
+		if (!token)
+			throw new UnauthorizedException(ERROR.MESSAGE.AUTHORIZATION_HEADER_ABSENT)
 
-				return true
-				
-			} catch (error) {
-				if (error.name !== 'Error') 
-					throw new UnauthorizedException(error)
+		try {
+			const payload = await this.tokensService.verifyAccess(token)
+			
+			req['payload'] = payload
 
-				console.log(error)
-				throw new InternalServerErrorException()
-			}
-		else
-			throw new UnauthorizedException({
-				name: ERROR.TYPE.AUTHORIZATION,
-				message: ERROR.MESSAGE.AUTHORIZATION_HEADER_ABSENT
-			})
+			return true
+
+		} catch (error) {
+			throw new UnauthorizedException(error)
+		}
 	}
 }

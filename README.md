@@ -9,7 +9,7 @@
 > - Better Comments
 
 <details>
-  <summary>Рекомендуемые правила разметки в Workbook.txt</summary>
+  <summary><b>Рекомендуемые правила разметки в Workbook.txt</b></summary>
   <span>
 
     ---------------------

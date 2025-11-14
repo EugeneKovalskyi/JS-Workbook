@@ -1,13 +1,16 @@
 import { Module } from '@nestjs/common'
-import { UserController } from './user.controller';
-import { UserService } from './user.service';
+import { HttpModule } from '@nestjs/axios';
 import { TokensModule } from '#common/services/tokens/tokens.module';
-import { UserShared } from './shared/user.shared';
+import { PrismaModule } from '#common/services/prisma/prisma.module';
+import { UserController } from './user.controller';
+import { UserService } from './services/user.service';
+import { UserSharedService } from './services/user-shared.service';
+import { UserPasswordService } from './services/user-password.service';
 
 @Module({
-	imports: [TokensModule],
+	imports: [HttpModule, TokensModule, PrismaModule],
 	controllers: [UserController],
-	providers: [UserService, UserShared],
-	exports: [UserService, UserShared]
+	providers: [UserService, UserSharedService, UserPasswordService],
+	exports: [UserService, UserSharedService]
 })
 export class UserModule {}

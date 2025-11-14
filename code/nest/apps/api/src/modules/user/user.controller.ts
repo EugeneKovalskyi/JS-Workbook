@@ -5,51 +5,53 @@ import {
 	Get,
 	Param,
 	ParseIntPipe,
+	Patch,
 	Post,
-	Put,
+	Query,
 	UseGuards,
 } from '@nestjs/common'
-import type { UpdateUserDTO, CreateUserDTO } from './user.dto'
-import type { UserResponse } from './user.types'
 import { ROLE } from '#common/constants'
 import { Role } from '#common/decorators'
-import { AccessGuard } from '#common/guards/access.guard'
+import { JwtAccessGuard } from '#common/guards/access.guard'
+import { GoogleAccessGuard } from '#common/guards/google-access.guard'
 import { RoleGuard } from '#common/guards/role.guard'
-import { UserService } from './user.service'
+import { UserService } from './services/user.service'
+import { CreateUserReqDto, CreateUserResDto, UpdateUserReqDto } from './user.dto'
 
 @Controller('user')
-@UseGuards(AccessGuard, RoleGuard)
 export class UserController {
 	constructor(private readonly userService: UserService) {}
 
 	@Post()
-	@Role(ROLE.ADMIN)
-	async createUser(@Body() dto: CreateUserDTO) {
+	async createUser(@Body() dto: CreateUserReqDto): Promise<CreateUserResDto> {
 		return this.userService.createUser(dto)
 	}
-	
+
+	//ISSUE ошибка не проходит в логи
 	@Get('all')
-	@Role(ROLE.ADMIN)
-	async getAllUsers() {
-		return this.userService.getAllUsers()
+	@UseGuards(GoogleAccessGuard)
+	// @UseGuards(JwtAccessGuard)
+	async getAllUsers(@Query('take', ParseIntPipe) take: number) {
+		return this.userService.getAllUsers(take)
 	}
 
 	@Get(':id')
-	@Role(ROLE.USER)
+	@UseGuards(JwtAccessGuard)
 	async getUser(@Param('id', ParseIntPipe) id: number) {
 		return this.userService.getUser(id)
 	}
 
-	@Put(':id')
+	@Patch(':id')
+	@UseGuards(JwtAccessGuard, RoleGuard)
 	@Role(ROLE.USER)
 	async updateUser(
 		@Param('id', ParseIntPipe) id: number,
-		@Body() dto: UpdateUserDTO
-	) {
-		return this.userService.updateUser(id, dto)
+		@Body() dto: UpdateUserReqDto) {
+		await this.userService.updateUser(id, dto)
 	}
 
 	@Delete(':id')
+	@UseGuards(JwtAccessGuard, RoleGuard)
 	@Role(ROLE.USER)
 	async deleteUser(@Param('id', ParseIntPipe) id: number) {
 		await this.userService.deleteUser(id)

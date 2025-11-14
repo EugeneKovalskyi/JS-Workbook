@@ -5,8 +5,6 @@ const data = ['Content-Type:', 'application/json']
 const aad = randomBytes(16)
 const key = randomBytes(32)
 const iv = randomBytes(15)
-const { encrypted, tag } = encrypt(data, key, iv, aad)
-const decrypted = decrypt(encrypted, key, iv, aad, tag)
 
 function encrypt(data: any, key: CipherKey, iv: BinaryLike, aad: Buffer) {
 	const cipher = createCipheriv('aes-256-ocb', key, iv, { authTagLength: 15 })
@@ -43,6 +41,9 @@ function decrypt(
 
 	return decrypted
 }
+
+const { encrypted, tag } = encrypt(data, key, iv, aad)
+const decrypted = decrypt(encrypted, key, iv, aad, tag)
 
 console.log('encrypted:', encrypted)
 console.log('tag:', tag)

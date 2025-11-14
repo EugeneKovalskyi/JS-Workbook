@@ -10,30 +10,29 @@ import {
   Res,
   UseGuards
 } from '@nestjs/common'
-import type { AuthDTO } from './auth.dto'
-import type { RefreshRequest } from './auth.types'
+import type { AuthJwtDTO, RefreshRequestDTO } from './jwt-auth.dto'
 import { SAFE_COOKIE_OPTIONS } from '#common/constants'
 import { Cookies } from '#common/decorators'
-import { AccessGuard } from '#common/guards/access.guard'
-import { RefreshGuard } from './guards/refresh.guard'
-import { AuthService } from './auth.service'
+import { JwtAccessGuard } from '#common/guards/access.guard'
+import { JwtRefreshGuard } from './jwt-auth-refresh.guard'
+import { JwtAuthService } from './jwt-auth.service'
 
-@Controller('auth')
-export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+@Controller('auth/jwt')
+export class JwtAuthController {
+  constructor(private readonly jwtAuthService: JwtAuthService) {}
 
   @Post('register')
   async register(
     @Headers('User-Agent') userAgent: string,
-    @Body() dto: AuthDTO,
+    @Body() dto: AuthJwtDTO,
     @Res({ passthrough: true }) res: Response
   ) {
     const {
       deviceId,
       tokens: { access, refresh }
-    } = await this.authService.register(userAgent, dto)
+    } = await this.jwtAuthService.register(userAgent, dto)
     
-    res.cookie('refresh', refresh, SAFE_COOKIE_OPTIONS)
+    res.cookie('refreshToken', refresh, SAFE_COOKIE_OPTIONS)
     res.cookie('deviceId', deviceId, SAFE_COOKIE_OPTIONS)
 
     return access
@@ -44,48 +43,48 @@ export class AuthController {
   async signIn(
     @Headers('User-Agent') userAgent: string,
     @Cookies('deviceId') clientDeviceId: number,
-    @Body() dto: AuthDTO,
+    @Body() dto: AuthJwtDTO,
     @Res({ passthrough: true }) res: Response
   ) {
     const {
       tokens: { access, refresh },
       deviceId
-    } = await this.authService.signIn(userAgent, clientDeviceId, dto)
+    } = await this.jwtAuthService.signIn(userAgent, clientDeviceId, dto)
 
-    res.cookie('refresh', refresh, SAFE_COOKIE_OPTIONS)
+    res.cookie('refreshToken', refresh, SAFE_COOKIE_OPTIONS)
 
-    if (deviceId)
+    if (deviceId) 
       res.cookie('deviceId', deviceId, SAFE_COOKIE_OPTIONS)
 
     return access
   }
 
   @HttpCode(HttpStatus.OK)
-  @UseGuards(AccessGuard)
+  @UseGuards(JwtAccessGuard)
   @Post('signout')
   async signout(
     @Cookies('deviceId') clientDeviceId: number,
     @Res({ passthrough: true }) res: Response
   ) {
-    await this.authService.signOut(clientDeviceId)
+    await this.jwtAuthService.signOut(clientDeviceId)
 
-    res.clearCookie('refresh')
+    res.clearCookie('refreshToken')
     res.clearCookie('deviceId')
   }
 
   @HttpCode(HttpStatus.OK)
-  @UseGuards(RefreshGuard)
+  @UseGuards(JwtRefreshGuard)
   @Post('refresh')
   async refresh(
-    @Req() req: RefreshRequest,
+    @Req() req: RefreshRequestDTO,
     @Res({ passthrough: true }) res: Response,
   ) {
     const {
       access,
       refresh
-    } = await this.authService.refresh(req.refreshId, req.payload)
+    } = await this.jwtAuthService.refresh(req.refreshId, req.payload)
 
-    res.cookie('refresh', refresh, SAFE_COOKIE_OPTIONS)
+    res.cookie('refreshToken', refresh, SAFE_COOKIE_OPTIONS)
 
     return access
   }

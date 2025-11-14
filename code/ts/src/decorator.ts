@@ -107,6 +107,8 @@ function CacheResult() {
   }
 }
 
+
+
 //* Parameter Decorator
 function Max(value: number) {
   return function (target: any, methodKey: string, paramIndex: number) {

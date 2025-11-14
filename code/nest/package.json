@@ -14,17 +14,21 @@
   "dependencies": {
     "@grpc/grpc-js": "^1.13.4",
     "@grpc/proto-loader": "^0.8.0",
+    "@nestjs/axios": "^4.0.1",
     "@nestjs/common": "^11.1.6",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.1.6",
     "@nestjs/jwt": "^11.0.0",
     "@nestjs/mapped-types": "^2.1.0",
     "@nestjs/microservices": "^11.1.6",
+    "@nestjs/passport": "^11.0.5",
     "@nestjs/platform-express": "^11.1.6",
     "@prisma/client": "^6.15.0",
+    "axios": "^1.13.2",
     "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
     "grpc-health-check": "^2.1.0",
+    "passport": "^0.7.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.2"
   },
@@ -61,7 +65,7 @@
     "typescript-eslint": "^8.40.0"
   },
   "prisma": {
-    "schema": "./apps/api/prisma/index.prisma"
+    "schema": "./apps/api/src/prisma/index.prisma"
   },
   "jest": {
     "moduleFileExtensions": [

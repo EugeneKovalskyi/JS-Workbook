@@ -11,15 +11,18 @@ import { ERROR } from '../constants'
 @Catch(PrismaClientKnownRequestError)
 export class PrismaExceptionFilter implements ExceptionFilter {
 	catch(exception: PrismaClientKnownRequestError) {
-		const { message, code } = exception
-		const cause = message.split('\n').pop()?.split('. ').pop()
+		const code = exception.code
+		const message = exception.message.split('\n').pop()?.split('. ').pop()
 
-		if (cause) {
-			if (code === 'P2025') 
-				throw new NotFoundException(cause)
+		if (message) {
+			switch (code) {
+				case 'P2025':
+					throw new NotFoundException(message)
+				default:
+					throw new BadRequestException(message)
+			} 
+		}
 
-			throw new BadRequestException(cause)
-		} else 
-			throw new InternalServerErrorException(ERROR.MESSAGE.UNCAUGHT_EXCEPTION)
+		throw new InternalServerErrorException(ERROR.MESSAGE.UNCAUGHT_EXCEPTION)
 	}
 }

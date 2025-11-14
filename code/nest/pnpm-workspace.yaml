@@ -1,4 +1,10 @@
 onlyBuiltDependencies:
+  - '@bufbuild/buf'
+  - '@nestjs/core'
   - '@prisma/client'
   - '@prisma/engines'
+  - '@swc/core'
+  - bcrypt
   - prisma
+  - protobufjs
+  - unrs-resolver
