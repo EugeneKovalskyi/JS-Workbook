@@ -10,27 +10,27 @@ import {
   Res,
   UseGuards
 } from '@nestjs/common'
-import type { AuthJwtDTO, RefreshTokenRequestDTO } from './jwt-auth.dto'
+import type { PasswordAuthDTO, RefreshTokenRequestDTO } from './password-auth.dto'
 import { SAFE_COOKIE_OPTIONS } from '#common/constants'
 import { Cookies } from '#common/decorators'
-import { JwtRefreshGuard } from './jwt-auth-refresh.guard'
-import { JwtAuthService } from './jwt-auth.service'
+import { RefreshGuard } from './password-auth-refresh.guard'
+import { PasswordAuthService } from './password-auth.service'
 import { AccessGuard } from '#common/guards/access.guard'
 
-@Controller('auth/jwt')
-export class JwtAuthController {
-  constructor(private readonly jwtAuthService: JwtAuthService) {}
+@Controller('auth/password')
+export class PasswordAuthController {
+  constructor(private readonly passwordAuthService: PasswordAuthService) {}
 
   @Post('register')
   async register(
     @Headers('User-Agent') userAgent: string,
-    @Body() dto: AuthJwtDTO,
+    @Body() dto: PasswordAuthDTO,
     @Res({ passthrough: true }) res: Response
   ) {
     const {
       deviceId,
       tokens: { accessToken, refreshToken }
-    } = await this.jwtAuthService.register(userAgent, dto)
+    } = await this.passwordAuthService.register(userAgent, dto)
     
     res.cookie('refreshToken', refreshToken, SAFE_COOKIE_OPTIONS)
     res.cookie('deviceId', deviceId, SAFE_COOKIE_OPTIONS)
@@ -43,13 +43,13 @@ export class JwtAuthController {
   async signIn(
     @Headers('User-Agent') userAgent: string,
     @Cookies('deviceId') clientDeviceId: number,
-    @Body() dto: AuthJwtDTO,
+    @Body() dto: PasswordAuthDTO,
     @Res({ passthrough: true }) res: Response
   ) {
     const {
       tokens: { accessToken, refreshToken },
       deviceId
-    } = await this.jwtAuthService.signIn(userAgent, clientDeviceId, dto)
+    } = await this.passwordAuthService.signIn(userAgent, clientDeviceId, dto)
 
     res.cookie('refreshToken', refreshToken, SAFE_COOKIE_OPTIONS)
 
@@ -66,7 +66,7 @@ export class JwtAuthController {
     @Cookies('deviceId') deviceId: number,
     @Res({ passthrough: true }) res: Response
   ) {
-    await this.jwtAuthService.signOut(deviceId)
+    await this.passwordAuthService.signout(deviceId)
 
     res.clearCookie('refreshToken')
     res.clearCookie('tokenOrigin')
@@ -74,7 +74,7 @@ export class JwtAuthController {
   }
 
   @HttpCode(HttpStatus.OK)
-  @UseGuards(JwtRefreshGuard)
+  @UseGuards(RefreshGuard)
   @Post('refresh')
   async refresh(
     @Req() req: RefreshTokenRequestDTO,
@@ -83,7 +83,7 @@ export class JwtAuthController {
     const {
       accessToken,
       refreshToken
-    } = await this.jwtAuthService.refresh(req.refreshTokenId, req.payload)
+    } = await this.passwordAuthService.refresh(req.refreshTokenId, req.payload)
 
     res.cookie('refreshToken', refreshToken, SAFE_COOKIE_OPTIONS)
 

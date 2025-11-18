@@ -1,6 +1,6 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
-import type { AccessTokenRequestDTO } from '#modules/jwt-auth/jwt-auth.dto'
+import type { AccessTokenRequestDTO } from '#modules/password-auth/password-auth.dto'
 import { ROLE } from '../constants'
 
 @Injectable()

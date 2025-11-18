@@ -9,7 +9,7 @@ import {
 import { TokensService } from '#common/services/tokens/tokens.service'
 
 @Injectable()
-export class JwtRefreshGuard implements CanActivate {
+export class RefreshGuard implements CanActivate {
 	constructor(private readonly tokensService: TokensService) {}
 
 	async canActivate(ctx: ExecutionContext): Promise<boolean> {

@@ -5,21 +5,21 @@ import {
 } from '@nestjs/common'
 import { compare } from 'bcrypt'
 import type { Payload, Tokens } from '#common/services/tokens/tokens.types'
-import type { AuthJwtDTO, AuthResponseDTO } from './jwt-auth.dto'
+import type { PasswordAuthDTO, PasswordAuthResponseDTO } from './password-auth.dto'
 import { ERROR, TOKEN_ORIGIN } from '#common/constants'
 import { TokensService } from '#common/services/tokens/tokens.service'
 import { UserService } from '../user/services/user.service'
 import { UserSharedService } from '../user/services/user-shared.service'
 
 @Injectable()
-export class JwtAuthService {
+export class PasswordAuthService {
 	constructor(
 		private readonly tokensService: TokensService,
 		private readonly userService: UserService,
 		private readonly userSharedService: UserSharedService
 	) {}
 
-	async register(userAgent: string, dto: AuthJwtDTO): Promise<AuthResponseDTO> {
+	async register(userAgent: string, dto: PasswordAuthDTO): Promise<PasswordAuthResponseDTO> {
 		const user = await this.userService.createUser(dto)
 		const tokens = await this.tokensService.generateTokens(user)
 		const deviceId = await this.userSharedService.createDevice(userAgent, user.id)
@@ -36,8 +36,8 @@ export class JwtAuthService {
 	async signIn(
 		userAgent: string,
 		clientDeviceId: number,
-		dto: AuthJwtDTO
-	): Promise<AuthResponseDTO> {
+		dto: PasswordAuthDTO
+	): Promise<PasswordAuthResponseDTO> {
 		const user = await this.userSharedService.getUserByEmail(dto.email)
 
 		if (!user)
@@ -76,7 +76,7 @@ export class JwtAuthService {
 		return { deviceId, tokens }
 	}
 
-	async signOut(deviceId: number) {
+	async signout(deviceId: number) {
 		await this.userSharedService.deleteDevice(deviceId)
 	}
 

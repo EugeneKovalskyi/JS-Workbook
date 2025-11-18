@@ -67,10 +67,10 @@ export class GoogleAuthController {
 	@UseGuards(AccessGuard)
 	@Post('signout')
 	async signout(
-		@Cookies('deviceId') clientDeviceId: number,
+		@Cookies('deviceId') deviceId: number,
 		@Res({ passthrough: true }) res: Response
 	) {
-		await this.googleAuthService.signOut(clientDeviceId)
+		await this.googleAuthService.signout(deviceId)
 
 		res.clearCookie('refreshToken')
 		res.clearCookie('tokenOrigin')

@@ -1,7 +1,7 @@
 import type { Request } from 'express'
 import type { Payload, Tokens } from '#common/services/tokens/tokens.types'
 
-export interface AuthJwtDTO {
+export interface PasswordAuthDTO {
 	name: string
 	email: string
 	password: string
@@ -16,7 +16,7 @@ export interface RefreshTokenRequestDTO extends Request {
 	payload: Payload
 }
 
-export interface AuthResponseDTO {
+export interface PasswordAuthResponseDTO {
 	deviceId?: number
 	tokens: Tokens
 }

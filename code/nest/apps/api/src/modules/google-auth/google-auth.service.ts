@@ -123,7 +123,7 @@ export class GoogleAuthService {
 		return data.access_token
 	}
 
-	async signOut(deviceId: number) {
+	async signout(deviceId: number) {
 		await this.userSharedService.deleteDevice(deviceId)
 	}
 }
