@@ -12,7 +12,7 @@ import { ERROR } from '#common/constants'
 
 @Injectable()
 @Catch(AxiosError)
-export class AxiosExceptioFilter implements ExceptionFilter {
+export class AxiosExceptionFilter implements ExceptionFilter {
 	private readonly tokenUrl: string
 	private readonly verifyTokenUrl: string
 
@@ -28,6 +28,9 @@ export class AxiosExceptioFilter implements ExceptionFilter {
 	catch(exception: AxiosError) {
 		const res = exception.response
 		const url = res?.config.url?.split('?')[0]
+
+		console.log('\n\x1b[1;31mERROR\x1b[0m \x1b[3;34m[AxiosExceptionFilter]\x1b[0m:')
+		console.error(exception)
 
 		if (url === this.tokenUrl) {
 			const { error, error_description } = res?.data as GoogleTokenErrResData

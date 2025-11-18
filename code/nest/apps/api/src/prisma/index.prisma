@@ -32,8 +32,14 @@ model Device {
 model RefreshToken {
 	id 							Int 						@id @default(autoincrement())
 	value 					String 					@unique
+  origin          String
   deviceId        Int             @map("device_id") @unique
   device          Device          @relation(fields: [deviceId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
 	@@map("refresh_tokens")
+}
+
+enum TOKENORIGIN {
+  PASSWORD  @map("password")
+  GOOGLE    @map("google")
 }

@@ -10,12 +10,12 @@ import {
   Res,
   UseGuards
 } from '@nestjs/common'
-import type { AuthJwtDTO, RefreshRequestDTO } from './jwt-auth.dto'
+import type { AuthJwtDTO, RefreshTokenRequestDTO } from './jwt-auth.dto'
 import { SAFE_COOKIE_OPTIONS } from '#common/constants'
 import { Cookies } from '#common/decorators'
-import { JwtAccessGuard } from '#common/guards/access.guard'
 import { JwtRefreshGuard } from './jwt-auth-refresh.guard'
 import { JwtAuthService } from './jwt-auth.service'
+import { AccessGuard } from '#common/guards/access.guard'
 
 @Controller('auth/jwt')
 export class JwtAuthController {
@@ -29,13 +29,13 @@ export class JwtAuthController {
   ) {
     const {
       deviceId,
-      tokens: { access, refresh }
+      tokens: { accessToken, refreshToken }
     } = await this.jwtAuthService.register(userAgent, dto)
     
-    res.cookie('refreshToken', refresh, SAFE_COOKIE_OPTIONS)
+    res.cookie('refreshToken', refreshToken, SAFE_COOKIE_OPTIONS)
     res.cookie('deviceId', deviceId, SAFE_COOKIE_OPTIONS)
 
-    return access
+    return accessToken
   }
 
   @HttpCode(HttpStatus.OK)
@@ -47,20 +47,20 @@ export class JwtAuthController {
     @Res({ passthrough: true }) res: Response
   ) {
     const {
-      tokens: { access, refresh },
+      tokens: { accessToken, refreshToken },
       deviceId
     } = await this.jwtAuthService.signIn(userAgent, clientDeviceId, dto)
 
-    res.cookie('refreshToken', refresh, SAFE_COOKIE_OPTIONS)
+    res.cookie('refreshToken', refreshToken, SAFE_COOKIE_OPTIONS)
 
     if (deviceId) 
       res.cookie('deviceId', deviceId, SAFE_COOKIE_OPTIONS)
 
-    return access
+    return accessToken
   }
 
   @HttpCode(HttpStatus.OK)
-  @UseGuards(JwtAccessGuard)
+  @UseGuards(AccessGuard)
   @Post('signout')
   async signout(
     @Cookies('deviceId') clientDeviceId: number,
@@ -76,16 +76,16 @@ export class JwtAuthController {
   @UseGuards(JwtRefreshGuard)
   @Post('refresh')
   async refresh(
-    @Req() req: RefreshRequestDTO,
+    @Req() req: RefreshTokenRequestDTO,
     @Res({ passthrough: true }) res: Response,
   ) {
     const {
-      access,
-      refresh
-    } = await this.jwtAuthService.refresh(req.refreshId, req.payload)
+      accessToken,
+      refreshToken
+    } = await this.jwtAuthService.refresh(req.refreshTokenId, req.payload)
 
-    res.cookie('refreshToken', refresh, SAFE_COOKIE_OPTIONS)
+    res.cookie('refreshToken', refreshToken, SAFE_COOKIE_OPTIONS)
 
-    return access
+    return accessToken
   }
 }

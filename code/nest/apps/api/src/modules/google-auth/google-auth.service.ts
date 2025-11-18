@@ -11,6 +11,7 @@ import type {
 } from './google-auth.types'
 import { TokensService } from '#common/services/tokens/tokens.service'
 import { UserSharedService } from '#modules/user/services/user-shared.service'
+import { TOKEN_ORIGIN } from '#common/constants';
 
 @Injectable()
 export class GoogleAuthService {
@@ -84,7 +85,11 @@ export class GoogleAuthService {
 
 		const deviceId = await this.userSharedService.createDevice(userAgent, user.id)
 
-		await this.tokensService.createRefresh(refreshToken, deviceId)
+		await this.tokensService.createRefreshToken(
+			refreshToken,
+			TOKEN_ORIGIN.GOOGLE,
+			deviceId
+		)
 
 		return {
 			deviceId,

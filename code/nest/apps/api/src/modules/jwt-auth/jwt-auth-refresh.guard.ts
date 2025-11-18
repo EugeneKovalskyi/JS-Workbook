@@ -3,7 +3,6 @@ import { ERROR } from '#common/constants'
 import {
 	CanActivate,
 	ExecutionContext,
-	HttpStatus,
 	Injectable,
 	UnauthorizedException
 } from '@nestjs/common'
@@ -15,21 +14,21 @@ export class JwtRefreshGuard implements CanActivate {
 
 	async canActivate(ctx: ExecutionContext): Promise<boolean> {
 		const req = ctx.switchToHttp().getRequest<Request>()
-		const token = String(req.cookies.refresh)
+		const token = String(req.cookies.refreshToken)
 		const deviceId = Number(req.cookies.deviceId)
 
 		if (!token)
 			throw new UnauthorizedException(ERROR.MESSAGE.REFRESH_TOKEN_ABSENT)
 
 		try {
-			const payload = await this.tokensService.verifyRefresh(token) 
-			const refreshToken = await this.tokensService.getRefresh(deviceId)
+			const payload = await this.tokensService.verifyRefreshToken(token) 
+			const refreshToken = await this.tokensService.getRefreshToken(deviceId)
 
 			if (refreshToken.value !== token)
 				throw new UnauthorizedException(ERROR.MESSAGE.REFRESH_TOKEN_INVALID)
 
 			req['payload'] = payload
-			req['refreshId'] = refreshToken.id
+			req['refreshTokenId'] = refreshToken.id
 
 			return true
 

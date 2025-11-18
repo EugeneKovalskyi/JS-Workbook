@@ -6,7 +6,7 @@ import {
 import { compare } from 'bcrypt'
 import type { Payload, Tokens } from '#common/services/tokens/tokens.types'
 import type { AuthJwtDTO, AuthResponseDTO } from './jwt-auth.dto'
-import { ERROR } from '#common/constants'
+import { ERROR, TOKEN_ORIGIN } from '#common/constants'
 import { TokensService } from '#common/services/tokens/tokens.service'
 import { UserService } from '../user/services/user.service'
 import { UserSharedService } from '../user/services/user-shared.service'
@@ -24,12 +24,13 @@ export class JwtAuthService {
 		const tokens = await this.tokensService.generateTokens(user)
 		const deviceId = await this.userSharedService.createDevice(userAgent, user.id)
 
-		await this.tokensService.createRefresh(tokens.refresh, deviceId)
+		await this.tokensService.createRefreshToken(
+			tokens.refreshToken,
+			TOKEN_ORIGIN.PASSWORD,
+			deviceId
+		)
 
-		return {
-			deviceId,
-			tokens,
-		}
+		return { deviceId, tokens }
 	}
 
 	async signIn(
@@ -42,10 +43,7 @@ export class JwtAuthService {
 		if (!user)
 			throw new UnauthorizedException(ERROR.MESSAGE.USER_ABSENT)
 
-		const { 
-			password,
-			...payload
-		} = user
+		const { password, ...payload } = user
 
 		if (!password)
 			throw new UnauthorizedException(ERROR.MESSAGE.PASSWORD_ABSENT)
@@ -62,14 +60,18 @@ export class JwtAuthService {
 			if (user.id !== device.userId)
 				throw new ForbiddenException(ERROR.MESSAGE.DEVICE_ABSENT)
 
-			const refreshToken = await this.tokensService.getRefresh(clientDeviceId)
-			await this.tokensService.updateRefresh(tokens.refresh, refreshToken.id)
+			const refreshToken = await this.tokensService.getRefreshToken(clientDeviceId)
+			await this.tokensService.updateRefreshToken(tokens.refreshToken, refreshToken.id)
 
 			return { tokens }
 		}
 
 		const deviceId = await this.userSharedService.createDevice(userAgent, user.id)
-		await this.tokensService.createRefresh(tokens.refresh, deviceId)
+		await this.tokensService.createRefreshToken(
+			tokens.refreshToken,
+			TOKEN_ORIGIN.PASSWORD,
+			deviceId
+		)
 
 		return { deviceId, tokens }
 	}
@@ -78,9 +80,9 @@ export class JwtAuthService {
 		await this.userSharedService.deleteDevice(clientDeviceId)
 	}
 
-	async refresh(refreshId: number, payload: Payload): Promise<Tokens> {
+	async refresh(refreshTokenId: number, payload: Payload): Promise<Tokens> {
 		const tokens = await this.tokensService.generateTokens(payload)
-		await this.tokensService.updateRefresh(tokens.refresh, refreshId)
+		await this.tokensService.updateRefreshToken(tokens.refreshToken, refreshTokenId)
 
 		return tokens
 	}

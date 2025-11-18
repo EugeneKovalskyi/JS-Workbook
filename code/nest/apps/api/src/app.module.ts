@@ -5,8 +5,7 @@ import { UserModule } from '#modules/user/user.module';
 import { FooModule } from '#modules/foo/foo.module';
 import { GoogleAuthModule } from '#modules/google-auth/google-auth.module';
 import { JwtAuthModule } from '#modules/jwt-auth/jwt-auth.module';
-import { ErrorLogInterceptor } from '#common/interceptors/error-log.interceptor';
-import { AxiosExceptioFilter } from '#common/filters/axios-exception.filter';
+import { AxiosExceptionFilter } from '#common/filters/axios-exception.filter';
 import { PrismaExceptionFilter } from '#common/filters/prisma-exception.filter';
 
 @Module({
@@ -23,8 +22,7 @@ import { PrismaExceptionFilter } from '#common/filters/prisma-exception.filter';
   ],
   controllers: [],
   providers: [
-    ErrorLogInterceptor,
-    AxiosExceptioFilter,
+    AxiosExceptionFilter,
     PrismaExceptionFilter
   ],
 })

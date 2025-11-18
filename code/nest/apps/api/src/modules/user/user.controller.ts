@@ -12,11 +12,10 @@ import {
 } from '@nestjs/common'
 import { ROLE } from '#common/constants'
 import { Role } from '#common/decorators'
-import { JwtAccessGuard } from '#common/guards/access.guard'
-import { GoogleAccessGuard } from '#common/guards/google-access.guard'
 import { RoleGuard } from '#common/guards/role.guard'
 import { UserService } from './services/user.service'
 import { CreateUserReqDto, CreateUserResDto, UpdateUserReqDto } from './user.dto'
+import { AccessGuard } from '#common/guards/access.guard'
 
 @Controller('user')
 export class UserController {
@@ -27,22 +26,20 @@ export class UserController {
 		return this.userService.createUser(dto)
 	}
 
-	//ISSUE ошибка не проходит в логи
 	@Get('all')
-	@UseGuards(GoogleAccessGuard)
-	// @UseGuards(JwtAccessGuard)
+	@UseGuards(AccessGuard)
 	async getAllUsers(@Query('take', ParseIntPipe) take: number) {
 		return this.userService.getAllUsers(take)
 	}
 
 	@Get(':id')
-	@UseGuards(JwtAccessGuard)
+	@UseGuards(AccessGuard)
 	async getUser(@Param('id', ParseIntPipe) id: number) {
 		return this.userService.getUser(id)
 	}
 
 	@Patch(':id')
-	@UseGuards(JwtAccessGuard, RoleGuard)
+	@UseGuards(AccessGuard, RoleGuard)
 	@Role(ROLE.USER)
 	async updateUser(
 		@Param('id', ParseIntPipe) id: number,
@@ -51,7 +48,7 @@ export class UserController {
 	}
 
 	@Delete(':id')
-	@UseGuards(JwtAccessGuard, RoleGuard)
+	@UseGuards(AccessGuard, RoleGuard)
 	@Role(ROLE.USER)
 	async deleteUser(@Param('id', ParseIntPipe) id: number) {
 		await this.userService.deleteUser(id)

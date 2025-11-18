@@ -7,12 +7,12 @@ export interface AuthJwtDTO {
 	password: string
 }
 
-export interface AccessRequestDTO extends Request {
+export interface AccessTokenRequestDTO extends Request {
 	payload: Payload
 }
 
-export interface RefreshRequestDTO extends Request {
-	refreshId: number
+export interface RefreshTokenRequestDTO extends Request {
+	refreshTokenId: number
 	payload: Payload
 }
 

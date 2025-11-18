@@ -5,6 +5,8 @@ export interface Payload {
 }
 
 export interface Tokens {
-	access: string
-	refresh: string
+	accessToken: string
+	refreshToken: string
 }
+
+export type TokenOrigin = 'password' | 'google'
