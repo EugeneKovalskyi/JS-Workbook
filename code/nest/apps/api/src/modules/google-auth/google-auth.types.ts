@@ -1,6 +1,6 @@
 export interface AuthResponse {
 	deviceId: number
-	refreshToken: string
+	refreshToken: string,
 	tokenInfo: TokenInfo
 }
 

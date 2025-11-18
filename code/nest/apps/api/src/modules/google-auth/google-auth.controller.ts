@@ -1,8 +1,21 @@
 import type { Request, Response } from 'express'
-import { Controller, Get, Headers, Query, Req, Res } from '@nestjs/common'
+import {
+	Controller,
+	Get,
+	Headers,
+	HttpCode,
+	HttpStatus,
+	Post,
+	Query,
+	Req,
+	Res,
+	UseGuards,
+} from '@nestjs/common'
 import type { TokenInfo } from './google-auth.types'
-import { SAFE_COOKIE_OPTIONS } from '#common/constants'
+import { SAFE_COOKIE_OPTIONS, TOKEN_ORIGIN } from '#common/constants'
 import { GoogleAuthService } from './google-auth.service'
+import { AccessGuard } from '#common/guards/access.guard'
+import { Cookies } from '#common/decorators'
 
 @Controller('auth/google')
 export class GoogleAuthController {
@@ -37,6 +50,7 @@ export class GoogleAuthController {
 		} = await this.googleAuthService.googleAuth(code, this.userAgent)
 
 		res.cookie('refreshToken', refreshToken, SAFE_COOKIE_OPTIONS)
+		res.cookie('tokenOrigin', TOKEN_ORIGIN.GOOGLE, SAFE_COOKIE_OPTIONS)
 		res.cookie('deviceId', deviceId, SAFE_COOKIE_OPTIONS)
 
 		return tokenInfo
@@ -47,5 +61,19 @@ export class GoogleAuthController {
 		const refreshToken = String(req.cookies.refreshToken)
 
 		return this.googleAuthService.getAccessToken(refreshToken)
+	}
+
+	@HttpCode(HttpStatus.OK)
+	@UseGuards(AccessGuard)
+	@Post('signout')
+	async signout(
+		@Cookies('deviceId') clientDeviceId: number,
+		@Res({ passthrough: true }) res: Response
+	) {
+		await this.googleAuthService.signOut(clientDeviceId)
+
+		res.clearCookie('refreshToken')
+		res.clearCookie('tokenOrigin')
+		res.clearCookie('deviceId')
 	}
 }

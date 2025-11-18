@@ -63,12 +63,13 @@ export class JwtAuthController {
   @UseGuards(AccessGuard)
   @Post('signout')
   async signout(
-    @Cookies('deviceId') clientDeviceId: number,
+    @Cookies('deviceId') deviceId: number,
     @Res({ passthrough: true }) res: Response
   ) {
-    await this.jwtAuthService.signOut(clientDeviceId)
+    await this.jwtAuthService.signOut(deviceId)
 
     res.clearCookie('refreshToken')
+    res.clearCookie('tokenOrigin')
     res.clearCookie('deviceId')
   }
 

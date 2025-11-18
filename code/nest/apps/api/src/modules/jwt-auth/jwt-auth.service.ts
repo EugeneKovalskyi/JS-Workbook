@@ -76,8 +76,8 @@ export class JwtAuthService {
 		return { deviceId, tokens }
 	}
 
-	async signOut(clientDeviceId: number) {
-		await this.userSharedService.deleteDevice(clientDeviceId)
+	async signOut(deviceId: number) {
+		await this.userSharedService.deleteDevice(deviceId)
 	}
 
 	async refresh(refreshTokenId: number, payload: Payload): Promise<Tokens> {
