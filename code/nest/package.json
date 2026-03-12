@@ -12,6 +12,7 @@
     "start:foo": "nest start foo --watch"
   },
   "dependencies": {
+    "@casl/ability": "^6.7.3",
     "@grpc/grpc-js": "^1.13.4",
     "@grpc/proto-loader": "^0.8.0",
     "@nestjs/axios": "^4.0.1",
@@ -26,6 +27,8 @@
     "@prisma/client": "^6.15.0",
     "axios": "^1.13.2",
     "bcrypt": "^6.0.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.3",
     "cookie-parser": "^1.4.7",
     "grpc-health-check": "^2.1.0",
     "passport": "^0.7.0",
@@ -47,6 +50,7 @@
     "@types/jest": "^30.0.0",
     "@types/node": "^24.3.0",
     "@types/supertest": "^6.0.3",
+    "dotenv": "^17.2.3",
     "eslint": "^9.34.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",

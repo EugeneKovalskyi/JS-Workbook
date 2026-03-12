@@ -1,4 +1,5 @@
 import type { Request, Response } from 'express'
+import type { TokenInfo } from './google-auth.types'
 import {
 	Controller,
 	Get,
@@ -11,8 +12,8 @@ import {
 	Res,
 	UseGuards,
 } from '@nestjs/common'
-import type { TokenInfo } from './google-auth.types'
-import { SAFE_COOKIE_OPTIONS, TOKEN_ORIGIN } from '#common/constants'
+import { TokenOrigin } from '@prisma/client'
+import { SAFE_COOKIE_OPTIONS } from '#common/constants'
 import { GoogleAuthService } from './google-auth.service'
 import { AccessGuard } from '#common/guards/access.guard'
 import { Cookies } from '#common/decorators'
@@ -50,7 +51,7 @@ export class GoogleAuthController {
 		} = await this.googleAuthService.googleAuth(code, this.userAgent)
 
 		res.cookie('refreshToken', refreshToken, SAFE_COOKIE_OPTIONS)
-		res.cookie('tokenOrigin', TOKEN_ORIGIN.GOOGLE, SAFE_COOKIE_OPTIONS)
+		res.cookie('tokenOrigin', TokenOrigin.GOOGLE, SAFE_COOKIE_OPTIONS)
 		res.cookie('deviceId', deviceId, SAFE_COOKIE_OPTIONS)
 
 		return tokenInfo

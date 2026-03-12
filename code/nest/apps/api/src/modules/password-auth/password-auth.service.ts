@@ -1,12 +1,14 @@
-import {
-	ForbiddenException,
-	Injectable,
-	UnauthorizedException,
-} from '@nestjs/common'
-import { compare } from 'bcrypt'
 import type { Payload, Tokens } from '#common/services/tokens/tokens.types'
-import type { PasswordAuthDTO, PasswordAuthResponseDTO } from './password-auth.dto'
-import { ERROR, TOKEN_ORIGIN } from '#common/constants'
+import {
+	RegisterDTO,
+	RegisterResDTO,
+	SignInDTO,
+	SignInResDTO,
+} from './password-auth.dto'
+import { ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common'
+import { TokenOrigin } from '@prisma/client'
+import { compare } from 'bcrypt'
+import { ERROR } from '#common/constants'
 import { TokensService } from '#common/services/tokens/tokens.service'
 import { UserService } from '../user/services/user.service'
 import { UserSharedService } from '../user/services/user-shared.service'
@@ -19,14 +21,14 @@ export class PasswordAuthService {
 		private readonly userSharedService: UserSharedService
 	) {}
 
-	async register(userAgent: string, dto: PasswordAuthDTO): Promise<PasswordAuthResponseDTO> {
+	async register(userAgent: string, dto: RegisterDTO): Promise<RegisterResDTO> {
 		const user = await this.userService.createUser(dto)
 		const tokens = await this.tokensService.generateTokens(user)
 		const deviceId = await this.userSharedService.createDevice(userAgent, user.id)
 
 		await this.tokensService.createRefreshToken(
 			tokens.refreshToken,
-			TOKEN_ORIGIN.PASSWORD,
+			TokenOrigin.PASSWORD,
 			deviceId
 		)
 
@@ -36,8 +38,8 @@ export class PasswordAuthService {
 	async signIn(
 		userAgent: string,
 		clientDeviceId: number,
-		dto: PasswordAuthDTO
-	): Promise<PasswordAuthResponseDTO> {
+		dto: SignInDTO
+	): Promise<SignInResDTO> {
 		const user = await this.userSharedService.getUserByEmail(dto.email)
 
 		if (!user)
@@ -61,15 +63,17 @@ export class PasswordAuthService {
 				throw new ForbiddenException(ERROR.MESSAGE.DEVICE_ABSENT)
 
 			const refreshToken = await this.tokensService.getRefreshToken(clientDeviceId)
+
 			await this.tokensService.updateRefreshToken(tokens.refreshToken, refreshToken.id)
 
 			return { tokens }
 		}
 
 		const deviceId = await this.userSharedService.createDevice(userAgent, user.id)
+
 		await this.tokensService.createRefreshToken(
 			tokens.refreshToken,
-			TOKEN_ORIGIN.PASSWORD,
+			TokenOrigin.PASSWORD,
 			deviceId
 		)
 
@@ -83,7 +87,6 @@ export class PasswordAuthService {
 	async refresh(refreshTokenId: number, payload: Payload): Promise<Tokens> {
 		const tokens = await this.tokensService.generateTokens(payload)
 		await this.tokensService.updateRefreshToken(tokens.refreshToken, refreshTokenId)
-
 		return tokens
 	}
 }

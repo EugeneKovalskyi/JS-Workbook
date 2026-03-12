@@ -1,17 +1,17 @@
-import { firstValueFrom } from 'rxjs'
-import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { JwtService } from '@nestjs/jwt';
-import { HttpService } from '@nestjs/axios'
 import type {
 	AccessTokenData,
 	AuthResponse,
 	TokensData,
 	UserInfoFromIdToken,
 } from './google-auth.types'
+import { firstValueFrom } from 'rxjs'
+import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
+import { HttpService } from '@nestjs/axios'
+import { TokenOrigin } from '@prisma/client';
 import { TokensService } from '#common/services/tokens/tokens.service'
 import { UserSharedService } from '#modules/user/services/user-shared.service'
-import { TOKEN_ORIGIN } from '#common/constants';
 
 @Injectable()
 export class GoogleAuthService {
@@ -87,7 +87,7 @@ export class GoogleAuthService {
 
 		await this.tokensService.createRefreshToken(
 			refreshToken,
-			TOKEN_ORIGIN.GOOGLE,
+			TokenOrigin.GOOGLE,
 			deviceId
 		)
 

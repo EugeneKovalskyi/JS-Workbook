@@ -1,7 +1,7 @@
-import type { RefreshToken } from '@prisma/client'
+import type { RefreshToken, TokenOrigin } from '@prisma/client'
+import type { Payload, Tokens } from './tokens.types'
 import { Inject, Injectable } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
-import type { Payload, TokenOrigin, Tokens } from './tokens.types'
 import { PrismaService } from '../prisma/prisma.service'
 
 @Injectable()
@@ -20,13 +20,13 @@ export class TokensService {
 	}
 
 	async verifyAccessToken(token: string): Promise<Payload> {
-		const { id, role, name } = await this.accessJwt.verifyAsync<Payload>(token)
-		return { id, role, name }
+		const { id, roles, name } = await this.accessJwt.verifyAsync<Payload>(token)
+		return { id, roles, name }
 	}
 
 	async verifyRefreshToken(token: string): Promise<Payload> {
-		const { id, role, name } = await this.refreshJwt.verifyAsync<Payload>(token)
-		return { id, role, name }
+		const { id, roles, name } = await this.refreshJwt.verifyAsync<Payload>(token)
+		return { id, roles, name }
 	}
 
 	async createRefreshToken(value: string, origin: TokenOrigin, deviceId: number) {

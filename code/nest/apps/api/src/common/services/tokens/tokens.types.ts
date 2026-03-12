@@ -1,6 +1,8 @@
+import { RoleName } from '@prisma/client'
+
 export interface Payload {
 	id: number
-	role: number
+	roles: RoleName[]
 	name: string
 }
 
@@ -8,5 +10,3 @@ export interface Tokens {
 	accessToken: string
 	refreshToken: string
 }
-
-export type TokenOrigin = 'password' | 'google'

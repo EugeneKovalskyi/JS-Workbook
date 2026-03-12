@@ -1,4 +1,6 @@
 import type { Request } from 'express'
+import type { Payload } from '#common/services/tokens/tokens.types'
+import type { GoogleAccessTokenInfo } from '#modules/google-auth/google-auth.types'
 import { firstValueFrom } from 'rxjs'
 import { HttpService } from '@nestjs/axios'
 import { ConfigService } from '@nestjs/config'
@@ -9,9 +11,8 @@ import {
 	InternalServerErrorException,
 	UnauthorizedException,
 } from '@nestjs/common'
-import type { Payload } from '#common/services/tokens/tokens.types'
-import type { GoogleAccessTokenInfo } from '#modules/google-auth/google-auth.types'
-import { ERROR, TOKEN_ORIGIN } from '#common/constants'
+import { TokenOrigin } from '@prisma/client'
+import { ERROR } from '#common/constants'
 import { TokensService } from '../services/tokens/tokens.service'
 import { getAccessTokenFromHeader } from '#common/utils'
 
@@ -42,7 +43,7 @@ export class AccessGuard implements CanActivate {
 			throw new UnauthorizedException(ERROR.MESSAGE.TOKEN_ORIGIN_ABSENT)
 
 		switch(origin) {
-			case TOKEN_ORIGIN.PASSWORD:
+			case TokenOrigin.PASSWORD:
 				try {
 					payload = await this.tokensService.verifyAccessToken(token)
 					break
@@ -50,7 +51,7 @@ export class AccessGuard implements CanActivate {
 					throw new UnauthorizedException(error)
 				}
 
-			case TOKEN_ORIGIN.GOOGLE:
+			case TokenOrigin.GOOGLE:
 				await firstValueFrom(
 					this.httpService.get<GoogleAccessTokenInfo>(
 						`${this.verifyTokenUrl}?access_token=${token}`

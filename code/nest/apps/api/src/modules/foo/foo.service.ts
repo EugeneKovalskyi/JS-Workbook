@@ -6,20 +6,20 @@ import { FOO_PACKAGE_NAME, PostFooDTO, GetFooDTO, Time } from './types/foo_messa
 
 @Injectable()
 export class FooService implements OnModuleInit {
-	private fooService: FooServiceClient
+	private fooServiceClient: FooServiceClient
 
 	constructor(@Inject(FOO_PACKAGE_NAME) private client: ClientGrpc) {}
 
 	onModuleInit() {
-		this.fooService = this.client.getService<FooServiceClient>(FOO_SERVICE_NAME)
+		this.fooServiceClient = this.client.getService<FooServiceClient>(FOO_SERVICE_NAME)
 	}
 
 	postFoo(dto: PostFooDTO) {
-		return this.fooService.postFoo(dto)
+		return this.fooServiceClient.postFoo(dto)
 	}
 
 	getFoo(dto: GetFooDTO) {
-		return this.fooService.getFoo(dto)
+		return this.fooServiceClient.getFoo(dto)
 	}
 
 	getTime() {
@@ -45,7 +45,7 @@ export class FooService implements OnModuleInit {
 			replySubject.next({ time: Date.now() })
 		}, 1000)
 
-		this.fooService.getTime(replySubject).subscribe({ next, error, complete})
+		this.fooServiceClient.getTime(replySubject).subscribe({ next, error, complete})
 		
 		setTimeout(() => {
 			clearInterval(interval)

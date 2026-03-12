@@ -1,13 +1,14 @@
+import type { GoogleTokenErrResData } from './types'
 import {
 	Catch,
 	ExceptionFilter,
+	HttpStatus,
 	Injectable,
 	InternalServerErrorException,
 	UnauthorizedException
 } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { AxiosError } from 'axios'
-import type { GoogleTokenErrResData } from './types'
 import { ERROR } from '#common/constants'
 
 @Injectable()
@@ -30,15 +31,29 @@ export class AxiosExceptionFilter implements ExceptionFilter {
 		const url = res?.config.url?.split('?')[0]
 
 		console.log('\n\x1b[1;31mERROR\x1b[0m \x1b[3;34m[AxiosExceptionFilter]\x1b[0m:')
-		console.error(exception)
+
 
 		if (url === this.tokenUrl) {
 			const { error, error_description } = res?.data as GoogleTokenErrResData
+
+			console.error(
+				`\tMessage: ${error}:  ${error_description}\n` +
+				`\tClientStatus:  ${HttpStatus.UNAUTHORIZED}\n` +
+				`\tServerStatus:  ${exception.status}\n`
+			)
+
 			throw new UnauthorizedException(`${error}: ${error_description}`)
 		}
 
-		if (url === this.verifyTokenUrl)
+		if (url === this.verifyTokenUrl) {
+			console.error(
+				`\tMessage:  ${ERROR.MESSAGE.ACCESS_TOKEN_INVALID}\n` +
+				`\tClientStatus:  ${HttpStatus.UNAUTHORIZED}\n` +
+				`\tServerStatus:  ${exception.status}\n`
+			)
+			
 			throw new UnauthorizedException(ERROR.MESSAGE.ACCESS_TOKEN_INVALID)
+		}
 
 		throw new InternalServerErrorException(ERROR.MESSAGE.UNCAUGHT_EXCEPTION)
 	}

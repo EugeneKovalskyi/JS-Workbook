@@ -11,12 +11,31 @@ model User {
   id 							Int 						@id @default(autoincrement())
   name 						String
   email 					String 					@unique
-  role 						Int
   password 				String?
-	device          Device[]
+  
+	devices         Device[]
+  roles           UserRole[]
 
   @@map("users")
-  @@index(email)
+}
+
+model Role {
+  id              Int             @id @default(autoincrement())
+  name            RoleName        @unique
+  users           UserRole[]
+
+  @@map("roles")
+}
+
+model UserRole {
+  userId          Int             @map("user_id")
+  roleId          Int             @map("role_id")
+
+  user            User            @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  role            Role            @relation(fields: [roleId], references: [id])
+
+  @@id([userId, roleId])
+  @@map("users_roles")
 }
 
 model Device {
@@ -32,14 +51,21 @@ model Device {
 model RefreshToken {
 	id 							Int 						@id @default(autoincrement())
 	value 					String 					@unique
-  origin          String
+  origin          TokenOrigin
   deviceId        Int             @map("device_id") @unique
   device          Device          @relation(fields: [deviceId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
 	@@map("refresh_tokens")
 }
 
-enum TOKENORIGIN {
-  PASSWORD  @map("password")
-  GOOGLE    @map("google")
+enum TokenOrigin {
+  PASSWORD    @map("password")
+  GOOGLE      @map("google")
+}
+
+enum RoleName {
+	ADMIN       @map("admin")
+	JUNIOR      @map("junior")
+	MIDDLE      @map("middle")
+	SENIOR      @map("senior")
 }

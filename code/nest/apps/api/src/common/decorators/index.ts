@@ -1,2 +1,2 @@
 export { Cookies } from './cookies.decorator'
-export { Role } from './role.decorator'
+export { Abilities } from './abilities.decorator'

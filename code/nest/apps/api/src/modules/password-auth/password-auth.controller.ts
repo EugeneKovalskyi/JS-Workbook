@@ -10,7 +10,7 @@ import {
   Res,
   UseGuards
 } from '@nestjs/common'
-import type { PasswordAuthDTO, RefreshTokenRequestDTO } from './password-auth.dto'
+import { RegisterDTO, SignInDTO, RefreshTokenRequestDTO } from './password-auth.dto'
 import { SAFE_COOKIE_OPTIONS } from '#common/constants'
 import { Cookies } from '#common/decorators'
 import { RefreshGuard } from './password-auth-refresh.guard'
@@ -24,9 +24,9 @@ export class PasswordAuthController {
   @Post('register')
   async register(
     @Headers('User-Agent') userAgent: string,
-    @Body() dto: PasswordAuthDTO,
+    @Body() dto: RegisterDTO,
     @Res({ passthrough: true }) res: Response
-  ) {
+  ): Promise<string> {
     const {
       deviceId,
       tokens: { accessToken, refreshToken }
@@ -43,9 +43,9 @@ export class PasswordAuthController {
   async signIn(
     @Headers('User-Agent') userAgent: string,
     @Cookies('deviceId') clientDeviceId: number,
-    @Body() dto: PasswordAuthDTO,
+    @Body() dto: SignInDTO,
     @Res({ passthrough: true }) res: Response
-  ) {
+  ): Promise<string> {
     const {
       tokens: { accessToken, refreshToken },
       deviceId
@@ -79,7 +79,7 @@ export class PasswordAuthController {
   async refresh(
     @Req() req: RefreshTokenRequestDTO,
     @Res({ passthrough: true }) res: Response,
-  ) {
+  ): Promise<string> {
     const {
       accessToken,
       refreshToken

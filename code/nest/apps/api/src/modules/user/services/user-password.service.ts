@@ -1,8 +1,8 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { genSalt, hash, compare } from 'bcrypt'
-import type { Passwords } from '../user.dto';
-import { ERROR } from '#common/constants';
 import { PrismaService } from '#common/services/prisma/prisma.service';
+import { ERROR } from '#common/constants';
+import { PasswordsDTO } from '../dto/passwords.dto';
 
 @Injectable()
 export class UserPasswordService {
@@ -14,7 +14,7 @@ export class UserPasswordService {
 		return hash(password, salt)
 	}
 
-	async update(id: number, passwords: Passwords): Promise<string> {
+	async update(id: number, passwords: PasswordsDTO): Promise<string> {
 		const { oldPassword, newPassword } = passwords
 		const { password } = await this.prismaService.user.findFirstOrThrow({
 			where: { id },
