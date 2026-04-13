@@ -1,8 +1,8 @@
 > [!TIP]
-> Схемы к конспекту на Miro:
-> https://miro.com/app/board/uXjVI1veXvo=/
+> Схемы к конспекту на [Miro](https://miro.com/app/board/uXjVI1veXvo=/?share_link_id=497944890713)
 
 > [!NOTE]
+> (Временно, до перехода на MD-маркировку)
 > Маркировка текста в Workbook.txt осуществляется в соответствии с расширениями vscode: 
 > - Txt Syntax
 > - Bookmarks
