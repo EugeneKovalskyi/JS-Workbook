@@ -11,9 +11,9 @@ const CACHE = '\x1b[1;38;5;215mCACHE\x1b[0m'
 // - логгирование всех методов и свойств класса
 // - логгирование отмеченных функций внутри метода (например someFunc().log())
 function Log<T extends new (...args: any[]) => any>() {
-  return function(target: T) {
+	return function (target: T) {
 		const fields = Object.getOwnPropertyNames(target.prototype).filter(
-			(property) => property !== 'constructor'
+			property => property !== 'constructor',
 		)
 
 		return class extends target {
@@ -26,11 +26,11 @@ function Log<T extends new (...args: any[]) => any>() {
 					if (this[field] instanceof Function) {
 						this[field] = new Proxy(this[field], {
 							apply(method, thisArg, args) {
-                let result: any
+								let result: any
 
 								console.info(
 									`\n${CALLED}: ${styledFieldStr} with arguments: ` +
-									`\x1b[33m${JSON.stringify(args, null, 2)}\x1b[0m`
+										`\x1b[33m${JSON.stringify(args, null, 2)}\x1b[0m`,
 								)
 
 								try {
@@ -40,9 +40,9 @@ function Log<T extends new (...args: any[]) => any>() {
 									throw error
 								}
 
-                console.info(
-								  `${SUCCESS}: ${styledFieldStr} return: ` +
-									`\x1b[33m${JSON.stringify(result, null, 2)}\x1b[0m`
+								console.info(
+									`${SUCCESS}: ${styledFieldStr} return: ` +
+										`\x1b[33m${JSON.stringify(result, null, 2)}\x1b[0m`,
 								)
 
 								return result
@@ -51,7 +51,7 @@ function Log<T extends new (...args: any[]) => any>() {
 					} else {
 						console.info(
 							`${PROPERTY}: ${styledFieldStr} === ` +
-							`\x1b[33m${JSON.stringify(this[field], null, 2)}\x1b[0m`
+								`\x1b[33m${JSON.stringify(this[field], null, 2)}\x1b[0m`,
 						)
 					}
 				}
@@ -62,125 +62,127 @@ function Log<T extends new (...args: any[]) => any>() {
 
 //* Property Decorator
 function IsString() {
-  return function(target: any, propertyKey: string) {
-    const metadataPropertyKey = Symbol(propertyKey)
+	return function (target: any, propertyKey: string) {
+		const metadataPropertyKey = Symbol(propertyKey)
 
-    Object.defineProperty(target, propertyKey, {
-      get: function (this: any) {
-        return Reflect.getOwnMetadata(metadataPropertyKey, this)
-      },
+		Object.defineProperty(target, propertyKey, {
+			get: function (this: any) {
+				return Reflect.getOwnMetadata(metadataPropertyKey, this)
+			},
 
-      set: function (this: any, value: string) {
-        if (typeof value !== 'string')
-          throw new Error('\x1b[31m"name" must be <string>.\x1b[0m')
+			set: function (this: any, value: string) {
+				if (typeof value !== 'string')
+					throw new Error('\x1b[31m"name" must be <string>.\x1b[0m')
 
-        Reflect.defineMetadata(metadataPropertyKey, value, this)
-      }
-    })
-  }
+				Reflect.defineMetadata(metadataPropertyKey, value, this)
+			},
+		})
+	}
 }
 
 //* Method Decorator
 function CacheResult() {
-  return function (target: any, methodKey: string, descriptor: any) {
-    descriptor.value = new Proxy(descriptor.value, {
+	return function (target: any, methodKey: string, descriptor: any) {
+		descriptor.value = new Proxy(descriptor.value, {
 			apply(method, thisArg, args) {
 				const cacheKey = 'cache::' + args
 
 				const cache = Reflect.getOwnMetadata(cacheKey, target, methodKey)
 
 				if (cache) {
-					console.warn(`${CACHE}: "\x1b[33m${thisArg.name}\x1b[0m": returned from cache`)
+					console.warn(
+						`${CACHE}: "\x1b[33m${thisArg.name}\x1b[0m": returned from cache`,
+					)
 					return cache
 				}
 
 				const result = Reflect.apply(method, thisArg, args)
-        
+
 				Reflect.defineMetadata(cacheKey, result, target, methodKey)
 
 				console.warn(`${CACHE}: "\x1b[33m${thisArg.name}\x1b[0m": value cached`)
 				return result
 			},
 		})
-    
-    return descriptor
-  }
+
+		return descriptor
+	}
 }
-
-
 
 //* Parameter Decorator
 function Max(value: number) {
-  return function (target: any, methodKey: string, paramIndex: number) {
-    const decoKey = 'Max'
-    const params = Reflect.getOwnMetadata(decoKey, target, methodKey) || []
-    const paramKey = target[methodKey].toString()
-      .match(/\(([^)]*?)\)/)?.[1]?.split(',')[paramIndex].trim()
+	return function (target: any, methodKey: string, paramIndex: number) {
+		const decoKey = 'Max'
+		const params = Reflect.getOwnMetadata(decoKey, target, methodKey) || []
+		const paramKey = target[methodKey]
+			.toString()
+			.match(/\(([^)]*?)\)/)?.[1]
+			?.split(',')
+			[paramIndex].trim()
 
-    params.push({ 
-      key: paramKey,
-      index: paramIndex,
-      maxValue: value
-    })
+		params.push({
+			key: paramKey,
+			index: paramIndex,
+			maxValue: value,
+		})
 
-    Reflect.defineMetadata(decoKey, params, target, methodKey)
-  }
+		Reflect.defineMetadata(decoKey, params, target, methodKey)
+	}
 }
 //* Method Decorator
 // Uses metadata that param decorator initialized before
 function Validate() {
-  return function (target: any, methodKey: string, descriptor: any) {
-    const originalMethod = target[methodKey]
-    const decoKey = 'Max'
+	return function (target: any, methodKey: string, descriptor: any) {
+		const originalMethod = target[methodKey]
+		const decoKey = 'Max'
 
-    descriptor.value = function (...args: any[]) {
-      const params = Reflect.getOwnMetadata(decoKey, target, methodKey)
+		descriptor.value = function (...args: any[]) {
+			const params = Reflect.getOwnMetadata(decoKey, target, methodKey)
 
-      for (const param of params)
-        if (args[param.index] > param.maxValue)
-          throw new Error(`\x1b[31mParameter "${param.key}" of method "${methodKey}" must be <= ${param.maxValue}.\x1b[0m`)
+			for (const param of params)
+				if (args[param.index] > param.maxValue)
+					throw new Error(
+						`\x1b[31mParameter "${param.key}" of method "${methodKey}" must be <= ${param.maxValue}.\x1b[0m`,
+					)
 
-      return originalMethod.apply(this, args)
-    }
+			return originalMethod.apply(this, args)
+		}
 
-    return descriptor
-  }
+		return descriptor
+	}
 }
 
 @Log()
 class User {
-  constructor(name: any) {
-    this.name = name
-  }
-  
-  @IsString()
-  name: any
+	constructor(name: any) {
+		this.name = name
+	}
 
-  @CacheResult()
-  @Validate()
-  calcSalary(
-    @Max(9999) rate: number,
-    @Max(1) efficiency: number
-  ) {
-    return rate * efficiency
-  }
+	@IsString()
+	name: any
+
+	@CacheResult()
+	@Validate()
+	calcSalary(@Max(9999) rate: number, @Max(1) efficiency: number) {
+		return rate * efficiency
+	}
 }
 
 //* Class instance
 const users = [
-  new User('Axel'),
-  new User('Bob'),
-  // new User(123) //* Error
+	new User('Axel'),
+	new User('Bob'),
+	// new User(123) //* Error
 ]
 
 //* Execute methods
-for (const user of users){
-  const efficiency = Number(Math.random().toFixed(3))
+for (const user of users) {
+	const efficiency = Number(Math.random().toFixed(3))
 
-  user.calcSalary(500, efficiency)
-  user.calcSalary(1000, efficiency)
-  user.calcSalary(1000, efficiency) //* Cached
-  // user.calcSalary(10000, 10) //* Error
+	user.calcSalary(500, efficiency)
+	user.calcSalary(1000, efficiency)
+	user.calcSalary(1000, efficiency) //* Cached
+	// user.calcSalary(10000, 10) //* Error
 }
 
 //* Decoration sequence
